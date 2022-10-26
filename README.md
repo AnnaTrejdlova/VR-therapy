@@ -1,4 +1,4 @@
-<div align="center">
+<div VR-cognitive-therapyalign="center">
   <h1 align="center">VR cognitive therapy</h1>
 
   <p align="center">
@@ -25,11 +25,8 @@ Využití virtuálních technologií pro pacienty se zhoršenými kognitivními 
 
 Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem
 
-### Instalace
+### Instalace 
 
-Naklonování repozitáře  
-   ```sh
-   git clone https://github.com/MystiMiki/VR-cognitive-therapy.git
-   ```
-   
-Otevření projektu v Unity editoru
+Stáhnutí [VR-cognitive-therapy.zip]()
+Extrahovat `VR-cognitive-therapy.zip`
+Spustění `VR-cognitive-therapy.exe`
