@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class OpenMenuScript : MonoBehaviour
 {
     GameObject canvas;
-    bool isRunning = false;
 
     private void Start()
     {
@@ -23,7 +22,6 @@ public class OpenMenuScript : MonoBehaviour
             {
                 SceneManager.LoadScene("ESCMenu", LoadSceneMode.Additive);
                 Time.timeScale = 0f;
-                isRunning = false;
             }
             else
             {
@@ -37,12 +35,10 @@ public class OpenMenuScript : MonoBehaviour
                 {
                     canvas.SetActive(true);
                     Time.timeScale = 0f;
-                    isRunning = false;
                 } else
                 {
                     canvas.SetActive(false);
                     Time.timeScale = 1f;
-                    isRunning = true;
                 }
             }
         }
@@ -57,11 +53,11 @@ public class OpenMenuScript : MonoBehaviour
 
         canvas.SetActive(false);
         Time.timeScale = 1f;
-        isRunning = true;
     }
     public void ExitToMainMenuButton()
     {
         SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1f;
     }
 
     public void ExitToDesktopButton()
