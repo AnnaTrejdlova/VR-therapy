@@ -1530,7 +1530,7 @@ GameObject:
   - component: {fileID: 667942779}
   - component: {fileID: 667942778}
   m_Layer: 0
-  m_Name: OpenMenuScript
+  m_Name: Handle ESCMenu Script
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
