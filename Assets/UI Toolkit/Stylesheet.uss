@@ -19,7 +19,7 @@
 }
 
 .dark-button:hover {
-    background-color: rgba(89, 89, 89, 255);
+    background-color: rgb(89, 89, 89);
 }
 
 .blue-button {
@@ -37,18 +37,18 @@
     padding-right: 20px;
     padding-top: 8px;
     padding-bottom: 8px;
-    border-left-color: rgba(21, 99, 251, 255);
-    border-right-color: rgba(21, 99, 251, 255);
-    border-top-color: rgba(21, 99, 251, 255);
-    border-bottom-color: rgba(21, 99, 251, 255);
+    border-left-color: rgb(21, 99, 251);
+    border-right-color: rgb(21, 99, 251);
+    border-top-color: rgb(21, 99, 251);
+    border-bottom-color: rgb(21, 99, 251);
 }
 
 .blue-button:hover {
-    background-color: rgba(74, 101, 255, 255);
-    border-left-color: rgba(74, 101, 255, 255);
-    border-right-color: rgba(74, 101, 255, 255);
-    border-top-color: rgba(74, 101, 255, 255);
-    border-bottom-color: rgba(74, 101, 255, 255);
+    background-color: rgb(74, 101, 255);
+    border-left-color: rgb(74, 101, 255);
+    border-right-color: rgb(74, 101, 255);
+    border-top-color: rgb(74, 101, 255);
+    border-bottom-color: rgb(74, 101, 255);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -73,18 +73,18 @@
 }
 
 .blue-outline-button:hover {
-    background-color: rgba(219, 219, 219, 255);
+    background-color: rgb(219, 219, 219);
     color: rgb(74, 101, 255);
-    border-left-color: rgba(74, 101, 255, 255);
-    border-right-color: rgba(74, 101, 255, 255);
-    border-top-color: rgba(74, 101, 255, 255);
-    border-bottom-color: rgba(74, 101, 255, 255);
+    border-left-color: rgb(74, 101, 255);
+    border-right-color: rgb(74, 101, 255);
+    border-top-color: rgb(74, 101, 255);
+    border-bottom-color: rgb(74, 101, 255);
 }
 
 .gray-button {
     margin-bottom: 32px;
-    color: rgba(255, 255, 255, 255);
-    background-color: rgba(119, 119, 119, 255);
+    color: rgb(255, 255, 255);
+    background-color: rgb(119, 119, 119);
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 8px;
@@ -93,17 +93,65 @@
     border-bottom-left-radius: 4px;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
-    border-left-color: rgba(119, 119, 119, 255);
-    border-right-color: rgba(119, 119, 119, 255);
-    border-top-color: rgba(119, 119, 119, 255);
-    border-bottom-color: rgba(119, 119, 119, 255);
+    border-left-color: rgb(119, 119, 119);
+    border-right-color: rgb(119, 119, 119);
+    border-top-color: rgb(119, 119, 119);
+    border-bottom-color: rgb(119, 119, 119);
     font-size: 32px;
 }
 
 .gray-button:hover {
-    background-color: rgba(84, 84, 84, 255);
-    border-left-color: rgba(85, 85, 85, 255);
-    border-right-color: rgba(85, 85, 85, 255);
-    border-top-color: rgba(85, 85, 85, 255);
-    border-bottom-color: rgba(85, 85, 85, 255);
+    background-color: rgb(84, 84, 84);
+    border-left-color: rgb(85, 85, 85);
+    border-right-color: rgb(85, 85, 85);
+    border-top-color: rgb(85, 85, 85);
+    border-bottom-color: rgb(85, 85, 85);
+}
+
+RadioButton {
+    background-color: rgb(255, 255, 255);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 255);
+    border-right-color: rgba(0, 0, 0, 255);
+    border-top-color: rgba(0, 0, 0, 255);
+    border-bottom-color: rgba(0, 0, 0, 255);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+RadioButton:hover {
+    background-color: rgba(219, 219, 219, 255);
+}
+
+RadioButton > VisualElement {
+    display: none;
+}
+
+RadioButton > Label {
+    color: rgba(0, 0, 0, 255);
+    -unity-text-align: middle-center;
+}
+
+.RadioButton--selected {
+    background-color: rgb(46, 46, 46);
+    color: rgba(255, 255, 255, 255);
+    -unity-text-align: upper-center;
+}
+
+.RadioButton--selected > Label {
+    color: rgba(255, 255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.RadioButton--selected:hover {
+    background-color: rgb(46, 46, 46);
 }

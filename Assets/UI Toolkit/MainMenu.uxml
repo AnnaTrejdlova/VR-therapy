@@ -10,21 +10,21 @@
         <ui:VisualElement name="OptionsGroup" style="position: absolute; left: 6%; bottom: 25%;">
             <ui:RadioButtonGroup label="Obtížnost" value="0" name="DifficultyGroup" style="flex-direction: column;">
                 <ui:GroupBox style="flex-direction: row;">
-                    <ui:RadioButton label="Jednoduchá" value="true" />
-                    <ui:RadioButton label="Střední" />
+                    <ui:RadioButton label="Jednoduchá" value="true" class="RadioButton--selected" />
+                    <ui:RadioButton label="Střední" style="border-left-width: 0; border-right-width: 0;" />
                     <ui:RadioButton label="Těžká" />
                 </ui:GroupBox>
             </ui:RadioButtonGroup>
             <ui:RadioButtonGroup label="Dominantní ruka" value="0" name="DominantHandGroup" style="flex-direction: column;">
                 <ui:GroupBox style="flex-direction: row;">
-                    <ui:RadioButton label="Levá" value="true" />
-                    <ui:RadioButton label="Pravá" />
+                    <ui:RadioButton label="Levá" value="true" class="RadioButton--selected" />
+                    <ui:RadioButton label="Pravá" style="border-left-width: 0;" />
                 </ui:GroupBox>
             </ui:RadioButtonGroup>
             <ui:RadioButtonGroup label="Poloha" value="0" name="PositionGroup" style="flex-direction: column;">
                 <ui:GroupBox style="flex-direction: row;">
-                    <ui:RadioButton label="V sedě" value="true" />
-                    <ui:RadioButton label="Ve stoje" />
+                    <ui:RadioButton label="V sedě" value="true" class="RadioButton--selected" />
+                    <ui:RadioButton label="Ve stoje" style="border-left-width: 0;" />
                 </ui:GroupBox>
             </ui:RadioButtonGroup>
         </ui:VisualElement>

@@ -41,8 +41,13 @@ public class MainMenuUI : MonoBehaviour
             {
                 if (evt.newValue)
                 {
+                    (evt.target as RadioButton).AddToClassList("RadioButton--selected");
                     difficultyGroup.value = item.i;
                     ApplicationModel.difficulty = (Difficulty)difficultyGroup.value;
+                }
+                else
+                {
+                    (evt.target as RadioButton).RemoveFromClassList("RadioButton--selected");
                 }
             });
         }
@@ -56,8 +61,13 @@ public class MainMenuUI : MonoBehaviour
             {
                 if (evt.newValue)
                 {
+                    (evt.target as RadioButton).AddToClassList("RadioButton--selected");
                     dominantHandGroup.value = item.i;
                     ApplicationModel.dominantHand = (DominantHand)dominantHandGroup.value;
+                }
+                else
+                {
+                    (evt.target as RadioButton).RemoveFromClassList("RadioButton--selected");
                 }
             });
         }
@@ -71,8 +81,13 @@ public class MainMenuUI : MonoBehaviour
             {
                 if (evt.newValue)
                 {
+                    (evt.target as RadioButton).AddToClassList("RadioButton--selected");
                     positionGroup.value = item.i;
                     ApplicationModel.position = (Position)positionGroup.value;
+                }
+                else
+                {
+                    (evt.target as RadioButton).RemoveFromClassList("RadioButton--selected");
                 }
             });
         }
