@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ImagePlacing : MonoBehaviour
 {
@@ -28,18 +29,18 @@ public class ImagePlacing : MonoBehaviour
     {
         if (liveUpdate)
         {
-            foreach (var obj in gameObjects)
+            while (gameObjects.Count > 0)
             {
-                Destroy(obj);
+                Destroy(gameObjects[0]);
+                gameObjects.RemoveAt(0);
             }
 
             PlaceImages();
         }
     }
     
-    public void PlaceImages(Position position = Position.Sitting)
+    public void PlaceImages()
     {
-
         // Get all walls
         GameObject[] walls = GameObject.FindGameObjectsWithTag("ImagePlaceable");
         Debug.Log("Number of walls: " + walls.Length);
@@ -48,24 +49,28 @@ public class ImagePlacing : MonoBehaviour
         Texture[] images = Resources.LoadAll<Texture>("Images");
         Debug.Log("Number of images: " + images.Length);
 
-        System.Random rng;
         if (setSeed)
+            Random.InitState(0);
+
+        Position position = ApplicationModel.position;
+        Difficulty difficulty = ApplicationModel.difficulty;
+
+        if (!liveUpdate)
         {
-            rng = new System.Random(0);
-        }
-        else
-        {
-            rng = new System.Random();
+            spaceBetween = new Dictionary<Difficulty, float>()
+            {
+                { Difficulty.Easy, 6f },
+                { Difficulty.Medium, 5f },
+                { Difficulty.Hard, 4f },
+            }[difficulty];
         }
 
-        var shuffledImages = images.OrderBy(a => rng.Next()).ToList();
+        var shuffledImages = images.OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
 
         float[] heightsList = new float[3] { height.lowHeight, height.midHeight, height.highHeight };
         int maxHeight = 3;
         if (position == Position.Sitting)
-        {
             maxHeight -= 1;
-        }
 
         foreach (var wall in walls)
         {
@@ -74,7 +79,7 @@ public class ImagePlacing : MonoBehaviour
             float _spaceBetween = t.lossyScale.x / (imageCount + 1);
             for (int i = 0; i < imageCount; i++)
             {
-                var k = UnityEngine.Random.Range(0, maxHeight);
+                var k = Random.Range(0, maxHeight);
 
                 // Instatiate image object and place it
                 GameObject imageObject = Instantiate(prefab,
@@ -90,13 +95,15 @@ public class ImagePlacing : MonoBehaviour
                 Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
                 if (shuffledImages.Count == 0)
                 {
-                    shuffledImages = images.OrderBy(a => rng.Next()).ToList();
+                    shuffledImages = images.OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
                 }
                 mat.mainTexture = shuffledImages[0];
                 shuffledImages.RemoveAt(0);
                 imageObject.GetComponent<MeshRenderer>().material = mat;
             }
         }
+
+        Debug.Log("Number of placed images: " + gameObjects.Count);
     }
 }
 
