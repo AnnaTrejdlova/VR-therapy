@@ -37,7 +37,7 @@ public class ImagePlacing : MonoBehaviour
         }
     }
     
-    public void PlaceImages()
+    public void PlaceImages(Position position = Position.Sitting)
     {
 
         // Get all walls
@@ -61,36 +61,40 @@ public class ImagePlacing : MonoBehaviour
         var shuffledImages = images.OrderBy(a => rng.Next()).ToList();
 
         float[] heightsList = new float[3] { height.lowHeight, height.midHeight, height.highHeight };
-
-        for (int k = 0; k < heightsList.Length; k++)
+        int maxHeight = 3;
+        if (position == Position.Sitting)
         {
-            foreach (var wall in walls)
-            {
-                var t = wall.transform;
-                int imageCount = (int)Math.Floor(t.lossyScale.x / spaceBetween);
-                float _spaceBetween = t.lossyScale.x / (imageCount + 1);
-                for (int i = 0; i < imageCount; i++)
-                {
-                    // Instatiate image object and place it
-                    GameObject imageObject = Instantiate(prefab,
-                        t.position
-                            + t.forward * -0.08f
-                            + t.up * (-t.lossyScale.y / 2 + heightsList[k])
-                            + t.right * (-t.lossyScale.x / 2 + _spaceBetween * (i + 1)),
-                        Quaternion.AngleAxis(t.rotation.eulerAngles.y, new Vector3(0, 1, 0))
-                    );
-                    gameObjects.Add(imageObject);
+            maxHeight -= 1;
+        }
 
-                    // Add texture to the object
-                    Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                    if (shuffledImages.Count == 0)
-                    {
-                        shuffledImages = images.OrderBy(a => rng.Next()).ToList();
-                    }
-                    mat.mainTexture = shuffledImages[0];
-                    shuffledImages.RemoveAt(0);
-                    imageObject.GetComponent<MeshRenderer>().material = mat;
+        foreach (var wall in walls)
+        {
+            var t = wall.transform;
+            int imageCount = (int)Math.Floor(t.lossyScale.x / spaceBetween);
+            float _spaceBetween = t.lossyScale.x / (imageCount + 1);
+            for (int i = 0; i < imageCount; i++)
+            {
+                var k = UnityEngine.Random.Range(0, maxHeight);
+
+                // Instatiate image object and place it
+                GameObject imageObject = Instantiate(prefab,
+                    t.position
+                        + t.forward * -0.08f
+                        + t.up * (-t.lossyScale.y / 2 + heightsList[k])
+                        + t.right * (-t.lossyScale.x / 2 + _spaceBetween * (i + 1)),
+                    Quaternion.AngleAxis(t.rotation.eulerAngles.y, new Vector3(0, 1, 0))
+                );
+                gameObjects.Add(imageObject);
+
+                // Add texture to the object
+                Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                if (shuffledImages.Count == 0)
+                {
+                    shuffledImages = images.OrderBy(a => rng.Next()).ToList();
                 }
+                mat.mainTexture = shuffledImages[0];
+                shuffledImages.RemoveAt(0);
+                imageObject.GetComponent<MeshRenderer>().material = mat;
             }
         }
     }
@@ -112,4 +116,11 @@ public struct Height
         this.midHeight = midHeight;
         this.highHeight = highHeight;
     }
+}
+
+
+public enum Position
+{
+    Sitting,
+    Standing
 }
