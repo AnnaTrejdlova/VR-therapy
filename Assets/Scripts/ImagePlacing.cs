@@ -117,10 +117,3 @@ public struct Height
         this.highHeight = highHeight;
     }
 }
-
-
-public enum Position
-{
-    Sitting,
-    Standing
-}
