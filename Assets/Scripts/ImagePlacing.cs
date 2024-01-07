@@ -47,7 +47,7 @@ public class ImagePlacing : MonoBehaviour
 
         // Get all images
         Texture[] images = Resources.LoadAll<Texture>("Images");
-        Debug.Log("Number of images: " + images.Length);
+        Debug.Log("Number of images in Assets: " + images.Length);
 
         if (setSeed)
             Random.InitState(0);
@@ -65,7 +65,21 @@ public class ImagePlacing : MonoBehaviour
             }[difficulty];
         }
 
-        var shuffledImages = images.OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
+        int totalImages = 0;
+        foreach (var wall in walls)
+        {
+            totalImages += (int)Math.Floor(wall.transform.lossyScale.x / spaceBetween);
+        }
+        Debug.Log("Number of images to draw: " + totalImages);
+
+        // Prepare image list
+        var imageList = new List<Texture>();
+        while (imageList.Count < totalImages)
+        {
+            List<Texture> shuffledImages = images.OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
+            imageList.AddRange(shuffledImages.GetRange(0, Math.Min(totalImages - imageList.Count, images.Length)));
+        }
+        WriteImageListToFile(imageList, false);
 
         float[] heightsList = new float[3] { height.lowHeight, height.midHeight, height.highHeight };
         int maxHeight = 3;
@@ -93,17 +107,23 @@ public class ImagePlacing : MonoBehaviour
 
                 // Add texture to the object
                 Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                if (shuffledImages.Count == 0)
-                {
-                    shuffledImages = images.OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
-                }
-                mat.mainTexture = shuffledImages[0];
-                shuffledImages.RemoveAt(0);
+                mat.mainTexture = imageList[0];
+                imageList.RemoveAt(0);
                 imageObject.GetComponent<MeshRenderer>().material = mat;
             }
         }
 
         Debug.Log("Number of placed images: " + gameObjects.Count);
+    }
+
+    static void WriteImageListToFile(List<Texture> ImageList, bool appendFile = true)
+    {
+        string path = Application.persistentDataPath + "/test.txt"; // Application.persistentDataPath = %userprofile%\AppData\LocalLow\<companyname>\
+
+        using (var writer = new StreamWriter(path, appendFile))
+        {
+            writer.Write(string.Join("\n", ImageList.Select(image => image.name)));
+        }
     }
 }
 
