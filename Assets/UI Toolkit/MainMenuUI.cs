@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,9 @@ public class MainMenuUI : MonoBehaviour
 
         Button startButton = root.Q<Button>("StartButton");
         startButton.clicked += StartButton;
+
+        Button startNonVRButton = root.Q<Button>("StartNonVR");
+        startNonVRButton.clicked += StartNonVRButton;
 
         Button exitButton = root.Q<Button>("ExitButton");
         exitButton.clicked += ExitButton;
@@ -95,7 +99,19 @@ public class MainMenuUI : MonoBehaviour
 
     private void StartButton()
     {
-        SceneManager.LoadScene("Room");
+        ApplicationModel.isVR = true;
+        LoadRoom();
+    }
+
+    private void StartNonVRButton()
+    {
+        ApplicationModel.isVR = false;
+        LoadRoom();
+    }
+
+    private void LoadRoom(string room = "Room")
+    {
+        SceneManager.LoadScene(room);
     }
 
     private void ExitButton()

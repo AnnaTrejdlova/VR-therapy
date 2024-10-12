@@ -11,6 +11,10 @@ public class FPSController : MonoBehaviour
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
     public Camera playerCamera;
+
+    public GameObject LeftHand;
+    public GameObject RightHand;
+
     public float lookSpeed = 2.0f;
     public float lookXLimit = 90.0f;
 
@@ -33,6 +37,12 @@ public class FPSController : MonoBehaviour
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (!ApplicationModel.isVR)
+        {
+            LeftHand.SetActive(false);
+            RightHand.SetActive(false);
+        }
     }
 
     void FixedUpdate()

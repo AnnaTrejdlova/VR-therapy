@@ -17,8 +17,8 @@
             </ui:RadioButtonGroup>
             <ui:RadioButtonGroup label="Dominantní ruka" value="0" name="DominantHandGroup" style="flex-direction: column;">
                 <ui:GroupBox style="flex-direction: row;">
-                    <ui:RadioButton label="Levá" value="true" class="RadioButton--selected" />
-                    <ui:RadioButton label="Pravá" style="border-left-width: 0;" />
+                    <ui:RadioButton label="Levá" value="false" />
+                    <ui:RadioButton label="Pravá" value="true" class="RadioButton--selected" style="border-left-width: 0;" />
                 </ui:GroupBox>
             </ui:RadioButtonGroup>
             <ui:RadioButtonGroup label="Poloha" value="0" name="PositionGroup" style="flex-direction: column;">
@@ -31,6 +31,7 @@
         <ui:VisualElement name="StartGroup" style="position: absolute; bottom: 10%; left: 6%; flex-direction: row;">
             <ui:Button text="Spustit" display-tooltip-when-elided="true" name="StartButton" class="blue-button" />
             <ui:Button text="Spustit seznámení s VR" display-tooltip-when-elided="true" name="StartTrainingButton" class="blue-outline-button" style="display: none;" />
+            <ui:Button text="Spustit bez VR" display-tooltip-when-elided="true" name="StartNonVR" class="dark-button" style="margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; padding-left: 20px; padding-right: 20px; padding-top: 8px; padding-bottom: 8px; width: auto; height: auto; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-left-color: rgb(46, 46, 46); border-right-color: rgb(46, 46, 46); border-top-color: rgb(46, 46, 46); border-bottom-color: rgb(46, 46, 46);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
