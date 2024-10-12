@@ -23,10 +23,13 @@ Využití virtuálních technologií pro pacienty se zhoršenými kognitivními 
 
 ### Předpoklady
 
-Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem
+Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem (pro Oculus)
+Nainstalovaný https://git-lfs.com/
 
-### Instalace 
+### Instalace
 
-Stáhnutí [VR-cognitive-therapy.zip]()
-Extrahovat `VR-cognitive-therapy.zip`
-Spustění `VR-cognitive-therapy.exe`
+```
+git clone https://github.com/AnnaTrejdlova/VR-cognitive-therapy
+cd VR-cognitive-therapy
+git lfs install
+```
