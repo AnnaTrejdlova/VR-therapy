@@ -15,17 +15,26 @@ public class ESCMenuUI : MonoBehaviour
 
         Button exitButton = root.Q<Button>("ExitButton");
         exitButton.clicked += ExitToMainMenuButton;
+
+        if (!ApplicationModel.isVR)
+        {
+            ApplicationModel.PauseGame();
+        }
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
     }
 
     public void ContinueButton()
     {
         gameObject.SetActive(false);
-        Time.timeScale = 1f;
+        ApplicationModel.UnPauseGame();
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
     public void ExitToMainMenuButton()
     {
         SceneManager.LoadScene("MainMenu");
-        Time.timeScale = 1f;
+        ApplicationModel.UnPauseGame();
     }
 
     public void ExitToDesktopButton()

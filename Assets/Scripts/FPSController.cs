@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -38,7 +40,11 @@ public class FPSController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if (!ApplicationModel.isVR)
+        if (ApplicationModel.isVR)
+        {
+            GetComponent<FPSController>().enabled = false;
+        }
+        else
         {
             LeftHand.SetActive(false);
             RightHand.SetActive(false);
@@ -51,7 +57,10 @@ public class FPSController : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
+        if (!ApplicationModel.isPaused)
+        {
+            HandleMovement();
+        }
     }
 
     void HandleMovement()

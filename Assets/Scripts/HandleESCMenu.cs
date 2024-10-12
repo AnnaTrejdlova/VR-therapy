@@ -27,13 +27,18 @@ public class HandleESCMenu : MonoBehaviour
 
                 if (!canvas.activeInHierarchy)
                 {
+                    ApplicationModel.PauseGame();
                     canvas.SetActive(true);
-                    Time.timeScale = 0f;
                 }
                 else
                 {
+                    ApplicationModel.UnPauseGame();
                     canvas.SetActive(false);
-                    Time.timeScale = 1f;
+                    if (ApplicationModel.isVR)
+                    {
+                        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                        UnityEngine.Cursor.visible = false;
+                    }
                 }
             }
         }
