@@ -4,6 +4,9 @@
   <p align="center">
     Kognitivní terapie ve virtální realitě
   </p>
+  <p align="center">
+    <a href="https://annatrejdlova.github.io/VR-cognitive-therapy/">Live demo</a>
+  </p>
   <br>
 </div>
 
@@ -23,13 +26,17 @@ Využití virtuálních technologií pro pacienty se zhoršenými kognitivními 
 
 ### Předpoklady
 
-Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem (pro Oculus)
+Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem (pro Oculus) \
 Nainstalovaný https://git-lfs.com/
 
 ### Instalace
-
 ```
 git clone https://github.com/AnnaTrejdlova/VR-cognitive-therapy
 cd VR-cognitive-therapy
 git lfs install
 ```
+
+### Windows
+1. Stáhnout zip [zde](https://github.com/AnnaTrejdlova/VR-cognitive-therapy/releases/latest)
+2. Extrahovat do složky
+3. Spustit `.exe` soubor
