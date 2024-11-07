@@ -2624,7 +2624,7 @@ MonoBehaviour:
   m_BendingEnabledInteractionLayers:
     m_Bits: 4294967295
   m_OverrideInteractorLineOrigin: 1
-  m_LineOriginTransform: {fileID: 0}
+  m_LineOriginTransform: {fileID: 938154405}
   m_LineOriginOffset: 0
 --- !u!120 &960205639
 LineRenderer:
@@ -3702,7 +3702,7 @@ MonoBehaviour:
   m_BendingEnabledInteractionLayers:
     m_Bits: 4294967295
   m_OverrideInteractorLineOrigin: 1
-  m_LineOriginTransform: {fileID: 0}
+  m_LineOriginTransform: {fileID: 1378812183}
   m_LineOriginOffset: 0
 --- !u!120 &1266064534
 LineRenderer:
