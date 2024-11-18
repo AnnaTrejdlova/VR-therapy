@@ -9,6 +9,7 @@ public class EditorObjectButton : MonoBehaviour {
     GameObject objectRefference;
 
     public void onClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.PlacingObjects);
         EditorObjectManager.Instance.SelectObject(objectRefference);
     }
 

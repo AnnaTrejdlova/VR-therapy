@@ -1,12 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TileManager : Singleton<TileManager> {
 
     public GameObject TilePrefab;
+    public List<TileInteractionStrategyEntry> tileInteractionStrategyEntries = new List<TileInteractionStrategyEntry>();
     float gridYpos = 0f;
     float tileSize = 1f;
     List<Tile> tiles = new List<Tile>();
@@ -17,28 +17,23 @@ public class TileManager : Singleton<TileManager> {
         SetUpGrid(10,10);
     }
 
-    public void TileClickHandle(Tile tile) {
-        // Place selected object or remove one if occupied
-        if (tile.isTileOccupied()) {
-            tile.RemoveObjectFromTile();
-            return;
-        }
+    # region Tile interaction strategy
 
-        if (EditorObjectManager.Instance.GetSelectedObject() == null) {
-            return;
-        }
-        tile.AddObjectToTile(EditorObjectManager.Instance.GetSelectedObject());
+    public void TileClickHandle(Tile tile) {
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileClick(tile);
     }
 
     public void TileHoverEnterHandle(Tile tile) {
-        // Add Outline to the tile
-        tile.ToggleOutline(true);   
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileHover(tile);
     }
 
     public void TileHoverExitHandle(Tile tile) {
-        // Remove outline from the tile
-        tile.ToggleOutline(false);
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileUnhover(tile);
     }
+
+    #endregion
+
+    #region Grid setup
 
     public void SetUpGrid(int width, int height) {
         for (int i = 0; i <= width; i++) {
@@ -53,4 +48,32 @@ public class TileManager : Singleton<TileManager> {
         tiles.Add(Instantiate(TilePrefab, position, Quaternion.identity).GetComponent<Tile>());
     }
 
+    #endregion
+
+    # region Support functions
+
+    ITileInteractionStrategy FindStrategy(EditorState state) {
+        foreach(var strat in tileInteractionStrategyEntries) {
+            if(strat.state == state) {
+                return strat.GetStrategy();
+            }
+        }
+        print("no strategy found for this editor state!");
+        return null;
+    }
+
+    #endregion
+
+}
+
+// Class for being able to assign strategies in editor
+
+[Serializable]
+public class TileInteractionStrategyEntry {
+    public EditorState state;
+    public MonoBehaviour strategy;
+
+    public ITileInteractionStrategy GetStrategy() {
+        return strategy as ITileInteractionStrategy;
+    }
 }
