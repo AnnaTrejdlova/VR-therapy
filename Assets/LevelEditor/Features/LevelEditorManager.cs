@@ -15,6 +15,8 @@ public class LevelEditorManager : Singleton<LevelEditorManager> {
 
     protected override void Awake() {
         base.Awake();
+
+        ChangeState(EditorState.PlacingObjects);
     }
 
     public void ChangeState(EditorState state) {

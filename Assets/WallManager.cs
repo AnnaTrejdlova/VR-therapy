@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallManager : Singleton<WallManager> {
 
     public GameObject WallJointPrefab;
-    public GameObject WallJointFill;
+    public GameObject WallFillPrefab;
 
     protected override void Awake() {
         base.Awake();
@@ -15,11 +15,11 @@ public class WallManager : Singleton<WallManager> {
     public void WallPointClick(Tile tile, TileWallOrientation orientation) {
         tile.AddWallJoint(WallJointPrefab, orientation);
     }
-    public void WallPointEnterHover(Tile tile, TileWallOrientation orientation) {
-
+    public void WallPointEnterHover(TileWallClickable tileWall) {
+        tileWall.ToggleOutline(true);
     }
-    public void WallPointExitHover(Tile tile, TileWallOrientation orientation) {
-
+    public void WallPointExitHover(TileWallClickable tileWall) {
+        tileWall.ToggleOutline(false);
     }
 
 

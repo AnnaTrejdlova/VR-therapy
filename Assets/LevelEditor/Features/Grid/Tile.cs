@@ -33,20 +33,49 @@ public class Tile : MonoBehaviour, IClickable {
     #region Wall management
 
     public void AddWallJoint(GameObject wallJointPrefab, TileWallOrientation orientation) {
-        GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        Vector3 wallPosition = transform.position + new Vector3(0, 0.5f, 0);
+        switch (orientation) {
+            case TileWallOrientation.TopLeft:
+                wallPosition += new Vector3(-0.5f, 0f, 0.5f);
+                break;
+            case TileWallOrientation.TopRight:
+                wallPosition += new Vector3(0.5f, 0f, 0.5f);
+                break;
+            case TileWallOrientation.BottomLeft:
+                wallPosition += new Vector3(-0.5f, 0f, -0.5f);
+                break;
+            case TileWallOrientation.BottomRight:
+                wallPosition += new Vector3(0.5f, 0f, -0.5f);
+                break;
+        }
+
+        GameObject go = Instantiate(wallJointPrefab, wallPosition, Quaternion.identity);
+        go.transform.position += new Vector3(0, transform.localScale.y, 0); // move up by the tile height
         AddedWallsDictionary.Add(orientation, go);
     }
 
     public void AddWallFill(GameObject wallFillPrefab, TileWallOrientation orientation) {
-        GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        Vector3 wallPosition = transform.position + new Vector3(0, 0.5f, 0);
+        switch (orientation) {
+            case TileWallOrientation.Top:
+                wallPosition += new Vector3(0.5f, 0f, 0.5f);
+                break;
+            case TileWallOrientation.Right:
+                break;
+            case TileWallOrientation.Bottom:
+                break;
+            case TileWallOrientation.Left:
+                wallPosition += new Vector3(0.5f, 0f, 0.5f);
+                break;
+        }
+        GameObject go = Instantiate(wallFillPrefab, wallPosition, Quaternion.identity);
+        go.transform.position += new Vector3(0, transform.localScale.y, 0);
         AddedWallsDictionary.Add(orientation, go);
     }
 
     public void ShowWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
         GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        go.transform.position += new Vector3(0, transform.localScale.y, 0);
         PreviewWallsDictionary.Add(orientation, go);
     }
 
@@ -56,7 +85,7 @@ public class Tile : MonoBehaviour, IClickable {
 
     public void ShowWallFillPreview(GameObject wallFillPrefab, TileWallOrientation orientation) {
         GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        go.transform.position += new Vector3(0, transform.localScale.y, 0);
         PreviewWallsDictionary.Add(orientation, go);
     }
 
