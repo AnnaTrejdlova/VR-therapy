@@ -8,11 +8,11 @@ public class ObjectRemoving : MonoBehaviour, ITileInteractionStrategy {
     }
 
     public void OnTileHover(Tile tile) {
-        tile.ToggleOutline(true);
+        tile.ToggleHighlightMaterial(true);
     }
 
     public void OnTileUnhover(Tile tile) {
-        tile.ToggleOutline(false);
+        tile.ToggleHighlightMaterial(false);
     }
 
     void RemoveObjectFromTile(Tile tile) {

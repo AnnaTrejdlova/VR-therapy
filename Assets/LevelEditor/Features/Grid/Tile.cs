@@ -1,16 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IClickable {
 
     [Header("Misc")]
     public float sizeMultiplicator = 0.1f;
+    public Material HighlightMaterial;
+    public Material PreviewMaterial;
     [Header("Walls")]
     public GameObject wallColliders;
     public List<TileOrientationPosition> tileOrientationPositions = new List<TileOrientationPosition>();
 
+    Material BaseMaterial;
+    MeshRenderer meshRenderer;
     BoxCollider classicCollider;
     float tileSize = 1f;
     Outline outline;
@@ -22,6 +27,8 @@ public class Tile : MonoBehaviour, IClickable {
     void Awake() {
         classicCollider = GetComponent<BoxCollider>();  
         outline = GetComponent<Outline>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        BaseMaterial = meshRenderer.material;
         SetTileSize(tileSize);
         ToggleOutline(false);   
     }
@@ -30,67 +37,91 @@ public class Tile : MonoBehaviour, IClickable {
         outline.enabled = toggleOn;
     }
 
+    public void ToggleHighlightMaterial(bool toggleOn) {
+        if (toggleOn) {
+            meshRenderer.material = HighlightMaterial;
+        } else {
+            meshRenderer.material = BaseMaterial;
+        }
+    }
+
     #region Wall management
 
     public void AddWallJoint(GameObject wallJointPrefab, TileWallOrientation orientation) {
-        Vector3 wallPosition = transform.position + new Vector3(0, 0.5f, 0);
-        switch (orientation) {
-            case TileWallOrientation.TopLeft:
-                wallPosition += new Vector3(-0.5f, 0f, 0.5f);
-                break;
-            case TileWallOrientation.TopRight:
-                wallPosition += new Vector3(0.5f, 0f, 0.5f);
-                break;
-            case TileWallOrientation.BottomLeft:
-                wallPosition += new Vector3(-0.5f, 0f, -0.5f);
-                break;
-            case TileWallOrientation.BottomRight:
-                wallPosition += new Vector3(0.5f, 0f, -0.5f);
-                break;
-        }
-
-        GameObject go = Instantiate(wallJointPrefab, wallPosition, Quaternion.identity);
+        GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
         go.transform.position += new Vector3(0, transform.localScale.y, 0); // move up by the tile height
         AddedWallsDictionary.Add(orientation, go);
+        MoveWallByOrientation(go, orientation);
     }
 
     public void AddWallFill(GameObject wallFillPrefab, TileWallOrientation orientation) {
-        Vector3 wallPosition = transform.position + new Vector3(0, 0.5f, 0);
-        switch (orientation) {
-            case TileWallOrientation.Top:
-                wallPosition += new Vector3(0.5f, 0f, 0.5f);
-                break;
-            case TileWallOrientation.Right:
-                break;
-            case TileWallOrientation.Bottom:
-                break;
-            case TileWallOrientation.Left:
-                wallPosition += new Vector3(0.5f, 0f, 0.5f);
-                break;
-        }
-        GameObject go = Instantiate(wallFillPrefab, wallPosition, Quaternion.identity);
-        go.transform.position += new Vector3(0, transform.localScale.y, 0);
-        AddedWallsDictionary.Add(orientation, go);
-    }
-
-    public void ShowWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
-        GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        go.transform.position += new Vector3(0, transform.localScale.y, 0);
-        PreviewWallsDictionary.Add(orientation, go);
-    }
-
-    public void HideWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
-
-    }
-
-    public void ShowWallFillPreview(GameObject wallFillPrefab, TileWallOrientation orientation) {
         GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
         go.transform.position += new Vector3(0, transform.localScale.y, 0);
-        PreviewWallsDictionary.Add(orientation, go);
+        AddedWallsDictionary.Add(orientation, go);
+        MoveWallByOrientation(go, orientation);
     }
 
-    public void HideWallFillPreview(GameObject wallFillPrefab, TileWallOrientation orientation) {
+    public void AddWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
+        if(!PreviewWallsDictionary.ContainsKey(orientation)) {
+            GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+            go.transform.position += new Vector3(0, transform.localScale.y, 0);
+            go.GetComponent<MeshRenderer>().material = PreviewMaterial;
+            MoveWallByOrientation(go, orientation);
+            PreviewWallsDictionary.Add(orientation, go);
+        } else {
+            PreviewWallsDictionary[orientation].SetActive(true);
+        }
+    }
 
+    public void AddWallFillPreview(GameObject wallFillPrefab, TileWallOrientation orientation) {
+        if (!PreviewWallsDictionary.ContainsKey(orientation)) {
+            GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+            go.transform.position += new Vector3(0, transform.localScale.y, 0);
+            go.GetComponent<MeshRenderer>().material = PreviewMaterial;
+            MoveWallByOrientation(go, orientation);
+            PreviewWallsDictionary.Add(orientation, go);
+        } else {
+            PreviewWallsDictionary[orientation].SetActive(true);
+        }
+    }
+
+    public void ClearWallPreviews() {
+        foreach (KeyValuePair<TileWallOrientation, GameObject> entry in PreviewWallsDictionary) {
+            entry.Value.SetActive(false);
+        }
+    }
+
+
+
+    void MoveWallByOrientation(GameObject wall, TileWallOrientation orientation) {
+        switch (orientation) {
+            case TileWallOrientation.Left:
+                wall.transform.position += new Vector3(-0.5f,0,0f);
+                wall.transform.rotation = Quaternion.Euler(0,90,0);
+                break;
+            case TileWallOrientation.TopLeft:
+                wall.transform.position += new Vector3(-0.5f, 0, 0.5f);
+                break;
+            case TileWallOrientation.TopRight:
+                wall.transform.position += new Vector3(0.5f, 0, 0.5f);
+                break;
+            case TileWallOrientation.BottomLeft:
+                wall.transform.position += new Vector3(-0.5f, 0, -0.5f);
+                break;
+            case TileWallOrientation.BottomRight:
+                wall.transform.position += new Vector3(0.5f, 0, -0.5f);
+                break;
+            case TileWallOrientation.Top:
+                wall.transform.position += new Vector3(0f, 0, 0.5f);
+                break;
+            case TileWallOrientation.Right:
+                wall.transform.position += new Vector3(0.5f, 0, 0f);
+                wall.transform.rotation = Quaternion.Euler(0, 90, 0);
+                break;
+            case TileWallOrientation.Bottom:
+                wall.transform.position += new Vector3(0f, 0, -0.5f);
+                break;
+        }
     }
 
 
