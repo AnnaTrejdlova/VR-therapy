@@ -47,18 +47,14 @@ public class Tile : MonoBehaviour, IClickable {
 
     #region Wall management
 
-    public void AddWallJoint(GameObject wallJointPrefab, TileWallOrientation orientation) {
-        GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        go.transform.position += new Vector3(0, transform.localScale.y, 0); // move up by the tile height
-        AddedWallsDictionary.Add(orientation, go);
-        MoveWallByOrientation(go, orientation);
-    }
-
-    public void AddWallFill(GameObject wallFillPrefab, TileWallOrientation orientation) {
-        GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-        go.transform.position += new Vector3(0, transform.localScale.y, 0);
-        AddedWallsDictionary.Add(orientation, go);
-        MoveWallByOrientation(go, orientation);
+    
+    public void CreateWallsBasedOnPreview(Material wallMaterial) {
+        AddedWallsDictionary = PreviewWallsDictionary;
+        foreach (KeyValuePair<TileWallOrientation, GameObject> entry in AddedWallsDictionary) {
+            GameObject wall = entry.Value;
+            wall.GetComponent<MeshRenderer>().material = wallMaterial;
+        }
+        PreviewWallsDictionary = new Dictionary<TileWallOrientation, GameObject>();
     }
 
     public void AddWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
