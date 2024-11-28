@@ -485,7 +485,7 @@ PrefabInstance:
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}
       propertyPath: scenes.Array.data[3].m_SceneName
-      value: Starting Scene
+      value: VRStarting
       objectReference: {fileID: 0}
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}

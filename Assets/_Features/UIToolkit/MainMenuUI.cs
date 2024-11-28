@@ -10,6 +10,9 @@ using UnityEngine.XR.Management;
 
 public class MainMenuUI : MonoBehaviour
 {
+    public SceneType sceneToLoad;
+    public SceneType sceneToUnload;
+
     private void OnEnable()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
@@ -100,18 +103,18 @@ public class MainMenuUI : MonoBehaviour
     private void StartButton()
     {
         ApplicationModel.isVR = true;
-        LoadRoom();
+        LoadGame();
     }
 
     private void StartNonVRButton()
     {
         ApplicationModel.isVR = false;
-        LoadRoom();
+        LoadGame();
     }
 
-    private void LoadRoom(string room = "Room")
+    private void LoadGame()
     {
-        SceneManager.LoadScene(room);
+        StartCoroutine(InitializeGameC());
     }
 
     private void ExitButton()
@@ -119,5 +122,20 @@ public class MainMenuUI : MonoBehaviour
         Application.Quit();
     }
 
-
+    private IEnumerator InitializeGameC()
+    {
+        // Wait until the scene loading task is complete
+        var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(sceneToLoad, 0f);
+        yield return new WaitUntil(() => loadTask.IsCompleted);
+        if (loadTask.Result)
+        {
+            // after its loaded do something
+            SceneLoadingManager.Instance.SetActiveScene(sceneToLoad);
+            var unLoadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(sceneToUnload);
+        }
+        else
+        {
+            Debug.LogError("Failed to load scene.");
+        }
+    }
 }

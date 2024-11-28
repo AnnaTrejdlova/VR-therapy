@@ -26,7 +26,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
     }
 
-    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength, bool addToGameplayScenes = false) {
+    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength = 0f, bool addToGameplayScenes = false) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);
         var tcs = new TaskCompletionSource<bool>();
         StartCoroutine(LoadSceneAsyncC(scene, tcs, loadingScreenLength, addToGameplayScenes));
@@ -115,11 +115,15 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
  * 
     private IEnumerator InitializeGameC() {
         // Wait until the scene loading task is complete
-        var loadTask = sceneLoader.LoadMainMenuAsync(SceneType.sum, 2f);
+        var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Room, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
-        if (loadTask.Result) {
+        if (loadTask.Result)
+        {
             // after its loaded do something
-        } else {
+            var unLoadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.MainMenu);
+        }
+        else
+        {
             Debug.LogError("Failed to load scene.");
         }
     }
