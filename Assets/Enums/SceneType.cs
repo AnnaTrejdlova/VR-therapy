@@ -1,8 +1,8 @@
 public enum SceneType
 {
-    Editing,
-    Login,
-    ProjectList,
-    Utilities,
-    _mainScene
+    ESCMenu,
+    MainMenu,
+    Room,
+    StartingScene,
+    Testing
 }
