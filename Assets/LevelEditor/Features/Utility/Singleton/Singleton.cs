@@ -9,7 +9,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
     public static T Instance {
         get {
             if (_instance == null) {
-                print($"The singleton you are trying to access isnt instantialized! (This causes issues only if not on the first frame calls)");
+                //print($"The singleton you are trying to access isnt instantialized! (This causes issues only if not on the first frame calls)");
             }
             return _instance;
         }

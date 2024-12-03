@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class TileWallClickable : MonoBehaviour, IClickable {
 
-    public TileWallOrientation orientation;
+    public TileWallPosition position;
     public Material HighlightMaterial;
 
     Material BaseMaterial;
     MeshRenderer meshRenderer;
     Outline outline;
-    Tile relatedTile;
+    public Tile relatedTile;
+    public Vector2Int positionInTile;
 
     void OnEnable() {
         outline = gameObject.GetComponent<Outline>();
@@ -22,11 +23,15 @@ public class TileWallClickable : MonoBehaviour, IClickable {
     }
 
     public void OnClick() {
-        WallManager.Instance.WallPointClick(relatedTile, orientation);
+        relatedTile.clickedTile = this;
+        print($"Uložil se {this.positionInTile}");
+        WallManager.Instance.WallPointClick(relatedTile, this, position);
     }
 
     public void OnHoverEnter() {
-        WallManager.Instance.WallPointEnterHover(relatedTile, this, orientation);
+        relatedTile.hoveredTile = this;
+        print($"Hovered se {this.positionInTile}");
+        WallManager.Instance.WallPointEnterHover(relatedTile, this, position);
     }
 
     public void OnHoverExit() {
@@ -44,9 +49,15 @@ public class TileWallClickable : MonoBehaviour, IClickable {
             meshRenderer.material = BaseMaterial;
         }
     }
+
+    public Vector2Int GetGridPosition()
+    {
+        return positionInTile;
+    }
 }
 
-public enum TileWallOrientation {
+public enum TileWallPosition {
+    Null,
     TopLeft,
     TopRight,
     BottomLeft,

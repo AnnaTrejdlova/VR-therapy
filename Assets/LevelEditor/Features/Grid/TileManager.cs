@@ -58,6 +58,9 @@ public class TileManager : Singleton<TileManager> {
             }
         }
 
+        if (startPos.x > endPos.x || startPos.y > endPos.y)
+            tilesToReturn.Reverse();
+
         return tilesToReturn;
     }
 

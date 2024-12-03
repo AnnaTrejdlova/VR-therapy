@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using UnityEngine;
 
@@ -10,9 +11,14 @@ public class Tile : MonoBehaviour, IClickable {
     public float sizeMultiplicator = 0.1f;
     public Material HighlightMaterial;
     public Material PreviewMaterial;
+    public Material JointPreviewMaterial;
+
     [Header("Walls")]
     public GameObject wallColliders;
     public List<TileOrientationPosition> tileOrientationPositions = new List<TileOrientationPosition>();
+
+    public TileWallClickable clickedTile;
+    public TileWallClickable hoveredTile;
 
     Material BaseMaterial;
     MeshRenderer meshRenderer;
@@ -21,8 +27,8 @@ public class Tile : MonoBehaviour, IClickable {
     Outline outline;
     GameObject addedGameObject; // what you put into it
     Vector2Int gridPosition;
-    Dictionary<TileWallOrientation, GameObject> AddedWallsDictionary = new Dictionary<TileWallOrientation, GameObject>();
-    Dictionary<TileWallOrientation, GameObject> PreviewWallsDictionary = new Dictionary<TileWallOrientation, GameObject>();
+    Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
 
     void Awake() {
         classicCollider = GetComponent<BoxCollider>();  
@@ -50,18 +56,18 @@ public class Tile : MonoBehaviour, IClickable {
     
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
         AddedWallsDictionary = PreviewWallsDictionary;
-        foreach (KeyValuePair<TileWallOrientation, GameObject> entry in AddedWallsDictionary) {
+        foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
             GameObject wall = entry.Value;
             wall.GetComponent<MeshRenderer>().material = wallMaterial;
         }
-        PreviewWallsDictionary = new Dictionary<TileWallOrientation, GameObject>();
+        PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     }
 
-    public void AddWallJointPreview(GameObject wallJointPrefab, TileWallOrientation orientation) {
+    public void AddWallJointPreview(GameObject wallJointPrefab, TileWallPosition orientation) {
         if(!PreviewWallsDictionary.ContainsKey(orientation)) {
             GameObject go = Instantiate(wallJointPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
             go.transform.position += new Vector3(0, transform.localScale.y, 0);
-            go.GetComponent<MeshRenderer>().material = PreviewMaterial;
+            go.GetComponent<MeshRenderer>().material = JointPreviewMaterial;
             MoveWallByOrientation(go, orientation);
             PreviewWallsDictionary.Add(orientation, go);
         } else {
@@ -69,7 +75,7 @@ public class Tile : MonoBehaviour, IClickable {
         }
     }
 
-    public void AddWallFillPreview(GameObject wallFillPrefab, TileWallOrientation orientation) {
+    public void AddWallFillPreview(GameObject wallFillPrefab, TileWallPosition orientation) {
         if (!PreviewWallsDictionary.ContainsKey(orientation)) {
             GameObject go = Instantiate(wallFillPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
             go.transform.position += new Vector3(0, transform.localScale.y, 0);
@@ -82,39 +88,37 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     public void ClearWallPreviews() {
-        foreach (KeyValuePair<TileWallOrientation, GameObject> entry in PreviewWallsDictionary) {
+        foreach (KeyValuePair<TileWallPosition, GameObject> entry in PreviewWallsDictionary) {
             entry.Value.SetActive(false);
         }
     }
 
-
-
-    void MoveWallByOrientation(GameObject wall, TileWallOrientation orientation) {
+    void MoveWallByOrientation(GameObject wall, TileWallPosition orientation) {
         switch (orientation) {
-            case TileWallOrientation.Left:
+            case TileWallPosition.Left:
                 wall.transform.position += new Vector3(-0.5f,0,0f);
                 wall.transform.rotation = Quaternion.Euler(0,90,0);
                 break;
-            case TileWallOrientation.TopLeft:
+            case TileWallPosition.TopLeft:
                 wall.transform.position += new Vector3(-0.5f, 0, 0.5f);
                 break;
-            case TileWallOrientation.TopRight:
+            case TileWallPosition.TopRight:
                 wall.transform.position += new Vector3(0.5f, 0, 0.5f);
                 break;
-            case TileWallOrientation.BottomLeft:
+            case TileWallPosition.BottomLeft:
                 wall.transform.position += new Vector3(-0.5f, 0, -0.5f);
                 break;
-            case TileWallOrientation.BottomRight:
+            case TileWallPosition.BottomRight:
                 wall.transform.position += new Vector3(0.5f, 0, -0.5f);
                 break;
-            case TileWallOrientation.Top:
+            case TileWallPosition.Top:
                 wall.transform.position += new Vector3(0f, 0, 0.5f);
                 break;
-            case TileWallOrientation.Right:
+            case TileWallPosition.Right:
                 wall.transform.position += new Vector3(0.5f, 0, 0f);
                 wall.transform.rotation = Quaternion.Euler(0, 90, 0);
                 break;
-            case TileWallOrientation.Bottom:
+            case TileWallPosition.Bottom:
                 wall.transform.position += new Vector3(0f, 0, -0.5f);
                 break;
         }
@@ -228,11 +232,25 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     #endregion
+
+    #region Helpers
+
+    public bool ContainsPreview(TileWallPosition orientation)
+    {
+        return PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
+    }
+
+    public TileWallPosition GetLastOrientation()
+    {
+        return PreviewWallsDictionary.Last().Key;
+    }
+
+    #endregion
 }
 // Class for being able to assign Orientation positions
 
 [Serializable]
 public class TileOrientationPosition {
-    public TileWallOrientation state;
+    public TileWallPosition state;
     public Vector3 position;
 }

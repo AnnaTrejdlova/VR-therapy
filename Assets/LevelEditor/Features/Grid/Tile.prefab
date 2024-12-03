@@ -164,8 +164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b31f39b2f3e7214984ded6d59b7c34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: 2
+  position: 3
   HighlightMaterial: {fileID: 2100000, guid: 2d12dec9c01059946a53a461902d2030, type: 2}
+  positionInTile: {x: 0, y: 0}
 --- !u!1 &1391382821597692706
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +269,8 @@ MonoBehaviour:
   sizeMultiplicator: 1
   HighlightMaterial: {fileID: 2100000, guid: 2d12dec9c01059946a53a461902d2030, type: 2}
   PreviewMaterial: {fileID: 2100000, guid: 9dea06a150486db46ae7a369d7f2d452, type: 2}
+  JointPreviewMaterial: {fileID: 2100000, guid: 747f39d523af18846801e08f3d2a4fbc,
+    type: 2}
   wallColliders: {fileID: 128904554}
   tileOrientationPositions:
   - state: 0
@@ -286,6 +289,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: -0.25}
   - state: 3
     position: {x: -0.25, y: 0, z: -0.25}
+  clickedTile: {fileID: 0}
 --- !u!114 &1391382821597692707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,8 +450,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b31f39b2f3e7214984ded6d59b7c34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: 3
+  position: 4
   HighlightMaterial: {fileID: 2100000, guid: 2d12dec9c01059946a53a461902d2030, type: 2}
+  positionInTile: {x: 1, y: 0}
 --- !u!1 &4312884294706514601
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,8 +582,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b31f39b2f3e7214984ded6d59b7c34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: 1
+  position: 2
   HighlightMaterial: {fileID: 2100000, guid: 2d12dec9c01059946a53a461902d2030, type: 2}
+  positionInTile: {x: 1, y: 1}
 --- !u!1 &7902628744301201324
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,5 +714,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b31f39b2f3e7214984ded6d59b7c34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: 0
+  position: 1
   HighlightMaterial: {fileID: 2100000, guid: 2d12dec9c01059946a53a461902d2030, type: 2}
+  positionInTile: {x: 0, y: 1}
