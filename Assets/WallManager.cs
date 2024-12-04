@@ -71,6 +71,7 @@ public class WallManager : Singleton<WallManager> {
         if (wallPlacingStartingTile == null) 
             return;
 
+        print("-------------------");
         if (tilesLine != null && tilesLine.Count > 0) ClearWallPreviews();
 
         // Get all tiles in the line
@@ -142,8 +143,8 @@ public class WallManager : Singleton<WallManager> {
 
         if (tilesLine.Count() == 1)
         {
-            startTilePosition = _tileClicked.GetGridPosition();
-            endTilePosition = _tileHovered.GetGridPosition();
+            startTilePosition = tilesLine[0].clickedTile.GetGridPosition();
+            endTilePosition = tilesLine[0].hoveredTile.GetGridPosition();
         }
 
         print($"Tile Position: {startTilePosition}, {endTilePosition}");
@@ -203,7 +204,7 @@ public class WallManager : Singleton<WallManager> {
         }
 
         Vector2Int delta = endTilePosition - startTilePosition;
-
+        print($"Delta wall: {endTilePosition} - {startTilePosition}");
         // Horizontal 
         if (delta.x != 0)
         {

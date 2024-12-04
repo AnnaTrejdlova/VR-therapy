@@ -929,7 +929,6 @@ MonoBehaviour:
   WallFillPrefab: {fileID: 6837552707209018026, guid: 6d8493305f0d45c42b2a575131768c56,
     type: 3}
   WallMaterial: {fileID: 2100000, guid: 9dea06a150486db46ae7a369d7f2d452, type: 2}
-  JointMaterial: {fileID: 2100000, guid: 747f39d523af18846801e08f3d2a4fbc, type: 2}
 --- !u!4 &837058098
 Transform:
   m_ObjectHideFlags: 0
