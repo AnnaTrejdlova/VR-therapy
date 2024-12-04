@@ -24,13 +24,11 @@ public class TileWallClickable : MonoBehaviour, IClickable {
 
     public void OnClick() {
         relatedTile.clickedTile = this;
-        print($"Uložil se {this.positionInTile}");
         WallManager.Instance.WallPointClick(relatedTile, this, position);
     }
 
     public void OnHoverEnter() {
         relatedTile.hoveredTile = this;
-        print($"Hovered se {this.positionInTile}");
         WallManager.Instance.WallPointEnterHover(relatedTile, this, position);
     }
 

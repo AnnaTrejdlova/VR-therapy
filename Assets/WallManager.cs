@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
@@ -74,15 +75,12 @@ public class WallManager : Singleton<WallManager> {
 
         // Get all tiles in the line
         tilesLine = TileManager.Instance.GetTilesInLine(wallPlacingStartingTile, lastHoveredTile);
-        print($"Start Tile: {wallPlacingStartingTile.GetGridPosition()}");
-        print($"End Tile: {lastHoveredTile.GetGridPosition()}");
 
         print($"tiles: {tilesLine.Count}");
         // Iterate through the tiles in the line
         for (int i = 0; i < tilesLine.Count; i++) {
             Tile currentTile = tilesLine[i];
             Tile endTile = tilesLine.Last();
-            print($"Current Tile: {currentTile.GetGridPosition()}");
 
             if (i == 0) 
             {
@@ -90,17 +88,17 @@ public class WallManager : Singleton<WallManager> {
                 currentTile.AddWallJointPreview(WallJointPrefab, wallPlacingStartingPosition);
                 if (GetDirection())
                 {
-                    TileWallPosition fillOrientation = DetermineFillOrientationWall(
+                    TileWallPosition fillPosition = DetermineFillOrientationWall(
                         currentTile,
                         endTile
                         );
-                    currentTile.AddWallFillPreview(WallFillPrefab, fillOrientation);
+                    currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
                 }
             }
             else
             {
                 // Middle tiles: Add fill and both joints
-                TileWallPosition fillOrientation = DetermineFillOrientationWall(
+                TileWallPosition fillPosition = DetermineFillOrientationWall(
                 wallPlacingStartingTile,
                 endTile
                 );
@@ -109,11 +107,10 @@ public class WallManager : Singleton<WallManager> {
                     wallPlacingStartingTile,
                     endTile
                 );
-                print($"StartingTile: {wallPlacingStartingTile.GetGridPosition()}, endTile {endTile.GetGridPosition()}");
 
-                if (!currentTile.ContainsPreview(fillOrientation))
+                if (!currentTile.ContainsPreview(fillPosition))
                 {
-                    currentTile.AddWallFillPreview(WallFillPrefab, fillOrientation);
+                    currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
                 }
 
                 if (!tilesLine[i - 1].ContainsPreview(jointOrientations[1]))
@@ -131,12 +128,59 @@ public class WallManager : Singleton<WallManager> {
 
     private bool GetDirection()
     {
-        if (tilesLine[0].hoveredTile.positionInTile == tilesLine[0].clickedTile.positionInTile)
-        {
+        if (tilesLine.Count() == 0)
             return false;
+
+        Vector2Int startTilePosition = new (0,0);
+        Vector2Int endTilePosition = new(0, 0);
+
+        if (tilesLine.Count() > 1)
+        {
+            startTilePosition = wallPlacingStartingTile.GetGridPosition();
+            endTilePosition = tilesLine.Last().GetGridPosition();
         }
 
-        return true;
+        if (tilesLine.Count() == 1)
+        {
+            startTilePosition = _tileClicked.GetGridPosition();
+            endTilePosition = _tileHovered.GetGridPosition();
+        }
+
+        print($"Tile Position: {startTilePosition}, {endTilePosition}");
+        var keyPosition = tilesLine[0].PreviewWallsDictionary.First().Key;
+        if (endTilePosition.x - startTilePosition.x > 0)
+        {
+            if (keyPosition == TileWallPosition.TopLeft || keyPosition == TileWallPosition.BottomLeft)
+            {
+                return true;
+            }
+        }
+
+        if (endTilePosition.x - startTilePosition.x < 0)
+        {
+            if (keyPosition == TileWallPosition.TopRight || keyPosition == TileWallPosition.BottomRight)
+            {
+                return true;
+            }
+        }
+
+        if (endTilePosition.y - startTilePosition.y > 0)
+        {
+            if (keyPosition == TileWallPosition.BottomRight || keyPosition == TileWallPosition.BottomLeft)
+            {
+                return true;
+            }
+        }
+
+        if (endTilePosition.y - startTilePosition.y < 0)
+        {
+            if (keyPosition == TileWallPosition.TopLeft || keyPosition == TileWallPosition.TopRight)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Vector2Int DetermineOrientation(Vector2Int firstTile,  Vector2Int secondTile)
@@ -163,7 +207,8 @@ public class WallManager : Singleton<WallManager> {
         // Horizontal 
         if (delta.x != 0)
         {
-            if (startTile.hoveredTile.GetGridPosition().y == 0)
+            // Horizontal
+            if (startTile.clickedTile.GetGridPosition().y == 0)
             {
                 return TileWallPosition.Bottom;
             }
@@ -173,7 +218,7 @@ public class WallManager : Singleton<WallManager> {
         else if (delta.y != 0)
         {
             // Vertical
-            if (startTile.hoveredTile.GetGridPosition().x == 0)
+            if (startTile.clickedTile.GetGridPosition().x == 0)
             {
                 return TileWallPosition.Left;
             }
