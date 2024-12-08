@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IClickable {
@@ -20,15 +18,15 @@ public class Tile : MonoBehaviour, IClickable {
     public TileWallClickable clickedTile;
     public TileWallClickable hoveredTile;
 
-    Material BaseMaterial;
-    MeshRenderer meshRenderer;
-    BoxCollider classicCollider;
-    float tileSize = 1f;
-    Outline outline;
-    GameObject addedGameObject; // what you put into it
-    Vector2Int gridPosition;
-    Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
-    public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    private Material BaseMaterial;
+    private MeshRenderer meshRenderer;
+    private BoxCollider classicCollider;
+    private float tileSize = 1f;
+    private Outline outline;
+    private GameObject addedGameObject; // what you put into it
+    private Vector2Int gridPosition;
+    private Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    private Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
 
     void Awake() {
         classicCollider = GetComponent<BoxCollider>();  

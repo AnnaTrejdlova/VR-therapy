@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TileWallClickable : MonoBehaviour, IClickable {
@@ -8,9 +5,9 @@ public class TileWallClickable : MonoBehaviour, IClickable {
     public TileWallPosition position;
     public Material HighlightMaterial;
 
-    Material BaseMaterial;
-    MeshRenderer meshRenderer;
-    Outline outline;
+    private Material BaseMaterial;
+    private MeshRenderer meshRenderer;
+    private Outline outline;
     public Tile relatedTile;
     public Vector2Int positionInTile;
 
