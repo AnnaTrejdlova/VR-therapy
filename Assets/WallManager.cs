@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class WallManager : Singleton<WallManager> {
-
+public class WallManager : Singleton<WallManager>
+{
     public GameObject WallJointPrefab;
     public GameObject WallFillPrefab;
     public Material WallMaterial;
 
-    // First joint has been selected and now we are previewing path to the second joint
     private bool _placingWall = false;
-    private Tile wallPlacingStartingTile;
-    private TileWallPosition wallPlacingStartingPosition;
-    private List<Tile> tilesLine;
+    private Tile _wallPlacingStartingTile;
+    private TileWallPosition _wallPlacingStartingPosition;
+    private List<Tile> _tilesLine;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
     }
 
@@ -28,20 +28,23 @@ public class WallManager : Singleton<WallManager> {
     {
         if (!_placingWall)
         {
-            // Start with placing
             tile.AddWallJointPreview(WallJointPrefab, position);
             _placingWall = true;
-            wallPlacingStartingTile = tile;
-            wallPlacingStartingPosition = position;
+            _wallPlacingStartingTile = tile;
+            _wallPlacingStartingPosition = position;
         }
         else
         {
-            // Place the previewed wall
-            CreateThePreviewWalls();
-            tilesLine = null;
+            CreatePreviewedWalls();
             _placingWall = false;
         }
     }
+
+    /// <summary>
+    /// Calling when hover entered over <see cref="TileWallClickable"/> on an appropriate Tile
+    /// </summary>
+    /// <param name="tile">Parrent <see cref="Tile"/></param>
+    /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public void WallPointEnterHover(Tile tile, TileWallClickable hoveredTile, TileWallPosition position)
     {
         hoveredTile.ToggleHighlightMaterial(true);
@@ -49,63 +52,75 @@ public class WallManager : Singleton<WallManager> {
         if (_placingWall)
             ShowWallsPreview(tile, position);
     }
+
+    /// <summary>
+    /// Calling when hover exited on <see cref="TileWallClickable"/> on an appropriate Tile
+    /// </summary>
+    /// <param name="tile">Parrent <see cref="Tile"/></param>
+    /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public void WallPointExitHover(Tile tile, TileWallClickable hoveredTile)
     {
         hoveredTile.ToggleHighlightMaterial(false);
     }
 
-    void CreateThePreviewWalls()
+    #region Create walls / clear wall preview
+    private void CreatePreviewedWalls()
     {
-        foreach(Tile tile in tilesLine)
+        foreach (Tile tile in _tilesLine)
+        {
             tile.CreateWallsBasedOnPreview(WallMaterial);
+        }
+    }
+    private void ClearWallPreviews()
+    {
+        foreach (Tile tile in _tilesLine)
+        {
+            tile.ClearWallPreviews();
+        }
     }
 
-    #region Crazy wall building algorithm
+    #endregion
 
-    void ShowWallsPreview(Tile lastHoveredTile, TileWallPosition endPosition)
+    #region Wall building algorithm
+
+    private void ShowWallsPreview(Tile lastHoveredTile, TileWallPosition endPosition)
     {
-        if (tilesLine != null && tilesLine.Count > 0)
+        if (_tilesLine != null && _tilesLine.Count > 0)
             ClearWallPreviews();
 
         // Get all tiles in the line
-        tilesLine = TileManager.Instance.GetTilesInLine(wallPlacingStartingTile, lastHoveredTile);
+        _tilesLine = TileManager.Instance.GetTilesInLine(_wallPlacingStartingTile, lastHoveredTile);
 
         // Iterate through the tiles in the line
-        for (int i = 0; i < tilesLine.Count; i++)
+        for (int i = 0; i < _tilesLine.Count; i++)
         {
-            Tile currentTile = tilesLine[i];
-            Tile endTile = tilesLine.Last();
+            Tile currentTile = _tilesLine[i];
+            Tile endTile = _tilesLine.Last();
+            Direction placementDirection;
 
-            // First tile: Add starting joint
+            // First tile: Add starting joint, or full wall on multiple tiles
             if (i == 0)
             {
-                TileWallPosition[] jointOrientations = DetermineJointOrientationWall(
-                   wallPlacingStartingTile,
-                   endTile
-                );
-
-                currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
-
                 Vector2Int startTilePosition;
                 Vector2Int endTilePosition;
-
-                if (tilesLine.Count() > 1)
+                if (_tilesLine.Count() > 1)
                 {
-                    startTilePosition = wallPlacingStartingTile.GetGridPosition();
-                    endTilePosition = tilesLine.Last().GetGridPosition();
+                    startTilePosition = _wallPlacingStartingTile.GetGridPosition();
+                    endTilePosition = _tilesLine.Last().GetGridPosition();
                 }
                 else
                 {
-                    startTilePosition = tilesLine[0].clickedTile.GetGridPosition();
-                    endTilePosition = tilesLine[0].hoveredTile.GetGridPosition();
+                    startTilePosition = _tilesLine[0].clickedTile.GetGridPosition();
+                    endTilePosition = _tilesLine[0].hoveredTile.GetGridPosition();
                 }
 
-                if (GetDirection(startTilePosition, endTilePosition) != Direction.Null)
+                placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
+                TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
+                currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
+
+                if (placementDirection != Direction.Null)
                 {
-                    TileWallPosition fillPosition = DetermineFillOrientationWall(
-                        currentTile,
-                        endTile
-                        );
+                    TileWallPosition fillPosition = DetermineFillPosition(placementDirection);
                     currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
                     currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
                 }
@@ -113,22 +128,17 @@ public class WallManager : Singleton<WallManager> {
             // Middle tiles: Add fill and both joints
             else
             {
-                TileWallPosition fillPosition = DetermineFillOrientationWall(
-                    wallPlacingStartingTile,
-                    endTile
-                );
+                placementDirection = GetDirection(_wallPlacingStartingTile.GetGridPosition(), endTile.GetGridPosition());
+                TileWallPosition fillPosition = DetermineFillPosition(placementDirection);
 
-                TileWallPosition[] jointOrientations = DetermineJointOrientationWall(
-                    wallPlacingStartingTile,
-                    endTile
-                );
+                TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
 
                 if (!currentTile.ContainsPreview(fillPosition))
                 {
                     currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
                 }
 
-                if (!tilesLine[i - 1].ContainsPreview(jointOrientations[0]))
+                if (!_tilesLine[i - 1].ContainsPreview(jointOrientations[0]))
                 {
                     currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
                 }
@@ -141,69 +151,21 @@ public class WallManager : Singleton<WallManager> {
         }
     }
 
-    /// <summary>
-    /// Return <see cref="Direction"/> according to the delta of <paramref name="startTilePosition"/> and <paramref name="endTilePosition"/> in grid
-    /// </summary>
-    /// <returns></returns>
-    private Direction GetDirection(Vector2Int startTilePosition, Vector2Int endTilePosition)
-    {
-        Vector2Int firstTilePosition = tilesLine[0].clickedTile.positionInTile;
-        if (endTilePosition.x - startTilePosition.x > 0)
-        {
-            if (firstTilePosition.x != 1)
-            {
-                return Direction.Right;
-            }
-        }
+    #endregion
 
-        if (endTilePosition.x - startTilePosition.x < 0)
-        {
-            if (firstTilePosition.x != 0)
-            {
-                return Direction.Left;
-            }
-        }
-
-        if (endTilePosition.y - startTilePosition.y > 0)
-        {
-            if (firstTilePosition.y != 1)
-            {
-                return Direction.Up;
-            }
-        }
-
-        if (endTilePosition.y - startTilePosition.y < 0)
-        {
-            if (firstTilePosition.y != 0)
-            {
-                return Direction.Down;
-            }
-        }
-
-        return Direction.Null;
-    }
+    #region Determine tile position of prefab
 
     /// <summary>
     /// Find and return tile position, at which a wall preview can be created, according to the delta in GridPosition
     /// </summary>
-    private TileWallPosition DetermineFillOrientationWall(Tile startTile, Tile endTile)
+    private TileWallPosition DetermineFillPosition(Direction placementDirection)
     {
-        Vector2Int startTilePosition = startTile.GetGridPosition();
-        Vector2Int endTilePosition = endTile.GetGridPosition();
-
-        if (startTilePosition == endTilePosition)
-        {
-            startTilePosition = startTile.clickedTile.positionInTile;
-            endTilePosition = startTile.hoveredTile.positionInTile;
-        }
-
-        var delta = endTilePosition - startTilePosition;
-
+        Vector2Int clickTileGridPosition = _wallPlacingStartingTile.clickedTile.GetGridPosition();
         // Horizontal
-        if (delta.x != 0)
+        if (placementDirection == Direction.Left || placementDirection == Direction.Right)
         {
             // Bottom
-            if (startTile.clickedTile.GetGridPosition().y == 0)
+            if (clickTileGridPosition.y == 0)
             {
                 return TileWallPosition.Bottom;
             }
@@ -213,10 +175,10 @@ public class WallManager : Singleton<WallManager> {
         }
 
         // Vertical
-        if (delta.y != 0)
+        if (placementDirection == Direction.Up || placementDirection == Direction.Down)
         {
             // Left
-            if (startTile.clickedTile.GetGridPosition().x == 0)
+            if (clickTileGridPosition.x == 0)
             {
                 return TileWallPosition.Left;
             }
@@ -231,26 +193,16 @@ public class WallManager : Singleton<WallManager> {
     /// <summary>
     /// Find and return the corner positions, at which a joint previews can be created, according to the delta in GridPosition
     /// </summary>
-    private TileWallPosition[] DetermineJointOrientationWall(Tile startTile, Tile endTile)
+    private TileWallPosition[] DetermineJointPositions(Direction placementDirection)
     {
         TileWallPosition[] returnArr = new TileWallPosition[2];
-
-        Vector2Int startTilePosition = startTile.GetGridPosition();
-        Vector2Int endTilePosition = endTile.GetGridPosition();
-
-        if (startTilePosition == endTilePosition)
-        {
-            startTilePosition = startTile.clickedTile.positionInTile;
-            endTilePosition = startTile.hoveredTile.positionInTile;
-        }
-
-        Direction delta = GetDirection(startTilePosition, endTilePosition);
+        Vector2Int clickTileGridPosition = _wallPlacingStartingTile.clickedTile.GetGridPosition();
 
         // Horizontal
-        if (delta == Direction.Left)
+        if (placementDirection == Direction.Left)
         {
             // Bottom
-            if (startTile.clickedTile.GetGridPosition().y == 0)
+            if (clickTileGridPosition.y == 0)
             {
                 returnArr[0] = TileWallPosition.BottomLeft;
                 returnArr[1] = TileWallPosition.BottomRight;
@@ -264,10 +216,10 @@ public class WallManager : Singleton<WallManager> {
         }
 
         // Horizontal
-        if (delta == Direction.Right)
+        if (placementDirection == Direction.Right)
         {
             // Bottom
-            if (startTile.clickedTile.GetGridPosition().y == 0)
+            if (clickTileGridPosition.y == 0)
             {
                 returnArr[0] = TileWallPosition.BottomRight;
                 returnArr[1] = TileWallPosition.BottomLeft;
@@ -281,10 +233,10 @@ public class WallManager : Singleton<WallManager> {
         }
 
         // Vertical Up
-        if (delta == Direction.Up)
+        if (placementDirection == Direction.Up)
         {
             // Left
-            if (startTile.clickedTile.GetGridPosition().x == 0)
+            if (clickTileGridPosition.x == 0)
             {
                 returnArr[0] = TileWallPosition.TopLeft;
                 returnArr[1] = TileWallPosition.BottomLeft;
@@ -298,10 +250,10 @@ public class WallManager : Singleton<WallManager> {
         }
 
         // Vertical Down
-        if (delta == Direction.Down)
+        if (placementDirection == Direction.Down)
         {
             // Left
-            if (startTile.clickedTile.GetGridPosition().x == 0)
+            if (clickTileGridPosition.x == 0)
             {
                 returnArr[0] = TileWallPosition.BottomLeft;
                 returnArr[1] = TileWallPosition.TopLeft;
@@ -315,19 +267,65 @@ public class WallManager : Singleton<WallManager> {
         }
 
         // Back to start
-        if (delta == Direction.Null)
+        if (placementDirection == Direction.Null)
         {
-            returnArr[0] = wallPlacingStartingPosition;
+            returnArr[0] = _wallPlacingStartingPosition;
             return returnArr;
         }
 
         throw new Exception("Error in determinating position of joint");
     }
 
-    void ClearWallPreviews() {
-        foreach(Tile tile in tilesLine) {
-            tile.ClearWallPreviews();
+    /// <summary>
+    /// Return <see cref="Direction"/> according to the delta of <paramref name="startTilePosition"/> and <paramref name="endTilePosition"/> in grid
+    /// </summary>
+    private Direction GetDirection(Vector2Int startTilePosition, Vector2Int endTilePosition)
+    {
+        Vector2Int delta = endTilePosition - startTilePosition;
+
+        if (delta.x > 0)
+        {
+            return Direction.Right;
         }
+
+        if (delta.x < 0)
+        {
+            return Direction.Left;
+        }
+
+        if (delta.y > 0)
+        {
+            return Direction.Up;
+        }
+
+        if (delta.y < 0)
+        {
+            return Direction.Down;
+        }
+
+        return Direction.Null;
+    }
+
+    /// <summary>
+    /// Return <see cref="Direction"/> of the first tile for the purpose of determining whether to create wall and second joint on a first tile
+    /// </summary>
+    /// <param name="startTilePosition">Grid position of <see cref="TileWallClickable"/>, child of the first tile</param>
+    /// <param name="endTilePosition">Grid position of <see cref="TileWallClickable"/>, child of the first tile</param>
+    private Direction GetDirectionFirstTile(Vector2Int startTilePosition, Vector2Int endTilePosition)
+    {
+        Direction direction = GetDirection(startTilePosition, endTilePosition);
+        Vector2Int firstTilePosition = _wallPlacingStartingTile.clickedTile.positionInTile;
+
+        if (direction == Direction.Right && firstTilePosition.x != 1)
+            return Direction.Right;
+        if (direction == Direction.Left && firstTilePosition.x != 0)
+            return Direction.Left;
+        if (direction == Direction.Up && firstTilePosition.y != 1)
+            return Direction.Up;
+        if (direction == Direction.Down && firstTilePosition.y != 0)
+            return Direction.Down;
+
+        return Direction.Null;
     }
 
     private enum Direction
