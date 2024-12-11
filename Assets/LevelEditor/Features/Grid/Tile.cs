@@ -238,6 +238,11 @@ public class Tile : MonoBehaviour, IClickable {
         return PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
     }
 
+    public bool ContainsWall(TileWallPosition orientation)
+    {
+        return AddedWallsDictionary.ContainsKey(orientation);
+    }
+
     public TileWallPosition GetLastOrientation()
     {
         return PreviewWallsDictionary.Last().Key;

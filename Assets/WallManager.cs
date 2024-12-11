@@ -116,13 +116,24 @@ public class WallManager : Singleton<WallManager>
 
                 placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
-                currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
+
+                if (!currentTile.ContainsPreview(jointOrientations[0]) && !NeighbourTilesContainsPreview(currentTile, jointOrientations[0]))
+                {
+                    currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
+                }
 
                 if (placementDirection != Direction.Null)
                 {
                     TileWallPosition fillPosition = DetermineFillPosition(placementDirection);
-                    currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
-                    currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
+                    if (!ContainsPrefab(currentTile, fillPosition))
+                    {
+                        currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
+                    }
+
+                    if (!ContainsPrefab(currentTile, jointOrientations[1]))
+                    {
+                        currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
+                    }
                 }
             }
             // Middle tiles: Add fill and both joints
@@ -133,22 +144,56 @@ public class WallManager : Singleton<WallManager>
 
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
 
-                if (!currentTile.ContainsPreview(fillPosition))
+                if (!ContainsPrefab(currentTile, fillPosition))
                 {
                     currentTile.AddWallFillPreview(WallFillPrefab, fillPosition);
                 }
 
-                if (!_tilesLine[i - 1].ContainsPreview(jointOrientations[0]))
-                {
-                    currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
-                }
-
-                if (!currentTile.ContainsPreview(jointOrientations[0]))
+                if (!ContainsPrefab(currentTile, jointOrientations[0]))
                 {
                     currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
                 }
+
+                if (!ContainsPrefab(currentTile, jointOrientations[1]))
+                {
+                    currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[1]);
+                }
             }
         }
+    }
+
+    #endregion
+
+    #region Checking free space for prefab
+
+    /// <summary>
+    /// The Tiles have common space for joints and wall fills. <br/>
+    /// Method checks if the common position is not already occupied
+    /// </summary>
+    /// <param name="centerTile">Checking <see cref="Tile"/> on which the prefab will be created</param>
+    /// <param name="prefabPosition">Checking position on which the prefab will be created</param>
+    /// <returns>True if some neighbour <see cref="Tile"/> wall or joint already occupy the position</returns>
+    private bool NeighbourTilesContainsPreview(Tile centerTile, TileWallPosition prefabPosition)
+    {
+        List<Tuple<Tile, TileWallPosition>> tileNeighbours = TileManager.Instance.GetNeighbourTiles(centerTile, prefabPosition);
+
+        foreach (var tuple in tileNeighbours)
+        {
+            if (tuple.Item1.ContainsWall(tuple.Item2))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool ContainsPrefab(Tile currentTile, TileWallPosition prefabPosition)
+    {
+        if (currentTile.ContainsPreview(prefabPosition) || NeighbourTilesContainsPreview(currentTile, prefabPosition))
+            return true;
+
+        return false;
     }
 
     #endregion
@@ -221,36 +266,19 @@ public class WallManager : Singleton<WallManager>
             // Bottom
             if (clickTileGridPosition.y == 0)
             {
-                returnArr[0] = TileWallPosition.BottomRight;
-                returnArr[1] = TileWallPosition.BottomLeft;
+                returnArr[0] = TileWallPosition.BottomLeft;
+                returnArr[1] = TileWallPosition.BottomRight;
                 return returnArr;
             }
 
             // Top
-            returnArr[0] = TileWallPosition.TopRight;
-            returnArr[1] = TileWallPosition.TopLeft;
+            returnArr[0] = TileWallPosition.TopLeft;
+            returnArr[1] = TileWallPosition.TopRight;
             return returnArr;
         }
 
         // Vertical Up
         if (placementDirection == Direction.Up)
-        {
-            // Left
-            if (clickTileGridPosition.x == 0)
-            {
-                returnArr[0] = TileWallPosition.TopLeft;
-                returnArr[1] = TileWallPosition.BottomLeft;
-                return returnArr;
-            }
-
-            // Right
-            returnArr[0] = TileWallPosition.TopRight;
-            returnArr[1] = TileWallPosition.BottomRight;
-            return returnArr;
-        }
-
-        // Vertical Down
-        if (placementDirection == Direction.Down)
         {
             // Left
             if (clickTileGridPosition.x == 0)
@@ -263,6 +291,23 @@ public class WallManager : Singleton<WallManager>
             // Right
             returnArr[0] = TileWallPosition.BottomRight;
             returnArr[1] = TileWallPosition.TopRight;
+            return returnArr;
+        }
+
+        // Vertical Down
+        if (placementDirection == Direction.Down)
+        {
+            // Left
+            if (clickTileGridPosition.x == 0)
+            {
+                returnArr[0] = TileWallPosition.TopLeft;
+                returnArr[1] = TileWallPosition.BottomLeft;
+                return returnArr;
+            }
+
+            // Right
+            returnArr[0] = TileWallPosition.TopRight;
+            returnArr[1] = TileWallPosition.BottomRight;
             return returnArr;
         }
 

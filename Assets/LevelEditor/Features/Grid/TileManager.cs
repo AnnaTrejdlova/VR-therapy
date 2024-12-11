@@ -1,17 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class TileManager : Singleton<TileManager> {
 
     public GameObject TilePrefab;
     public List<TileInteractionStrategyEntry> tileInteractionStrategyEntries = new List<TileInteractionStrategyEntry>();
-    float gridYpos = 0f;
-    float tileSize = 1f;
-    List<Tile> tiles = new List<Tile>();
-    Dictionary<Vector2Int, Tile> tileDictionary = new Dictionary<Vector2Int, Tile>();
+    private float _gridYpos = 0f;
+    private float _tileSize = 1f;
+    private List<Tile> _tiles = new List<Tile>();
+    private Dictionary<Vector2Int, Tile> _tileDictionary = new Dictionary<Vector2Int, Tile>();
+    private int _yMax;
+    private int _xMax;
 
     protected override void Awake() {
         base.Awake();
@@ -48,7 +48,7 @@ public class TileManager : Singleton<TileManager> {
         bool isHorizontal = startPos.y == endPos.y;
         bool isVertical = startPos.x == endPos.x;
 
-        foreach (Tile tile in tiles) {
+        foreach (Tile tile in _tiles) {
             Vector2Int tilePos = tile.GetGridPosition();
 
             if (isHorizontal && tilePos.y == startPos.y && tilePos.x >= minX && tilePos.x <= maxX) {
@@ -93,9 +93,11 @@ public class TileManager : Singleton<TileManager> {
     #region Grid setup
 
     public void SetUpGrid(int width, int height) {
+        _yMax = width;
+        _yMax = height;
         for (int i = 0; i <= width; i++) {
             for (int j = 0; j <= height; j++) {
-                Vector3 position = new Vector3(i * tileSize, gridYpos, j * tileSize);
+                Vector3 position = new Vector3(i * _tileSize, _gridYpos, j * _tileSize);
                 SpawnTile(i, j, position);
             }
         }
@@ -104,8 +106,8 @@ public class TileManager : Singleton<TileManager> {
     void SpawnTile(int x, int y, Vector3 position) {
         Tile tile = Instantiate(TilePrefab, position, Quaternion.identity).GetComponent<Tile>();
         tile.SetGridPosition(new Vector2Int(x, y));
-        tileDictionary[new Vector2Int(x, y)] = tile;
-        tiles.Add(tile);
+        _tileDictionary[new Vector2Int(x, y)] = tile;
+        _tiles.Add(tile);
     }
 
     #endregion
@@ -124,6 +126,162 @@ public class TileManager : Singleton<TileManager> {
 
     #endregion
 
+    #region Helpers
+
+    public List<Tuple<Tile, TileWallPosition>> GetNeighbourTiles(Tile centerTile, TileWallPosition prefabPosition)
+    {
+        List<Tuple<Tile, TileWallPosition>> neighbourTiles = new List<Tuple<Tile, TileWallPosition>>();
+        Vector2Int gridPosition = centerTile.GetGridPosition();
+
+        // Top Left joint
+        if (prefabPosition == TileWallPosition.TopLeft)
+        {
+            // Left tile
+            if (gridPosition.x - 1 >= 0)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                    _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
+                    TileWallPosition.Left));
+            }
+
+            // UpperLeft tile
+            if (gridPosition.x - 1 >= 0 && gridPosition.y + 1 <= _yMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                    _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y + 1)],
+                    TileWallPosition.TopLeft));
+            }
+
+            // Upper tile
+            if (gridPosition.y + 1 <= _yMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
+                TileWallPosition.Top));
+            }
+
+            return neighbourTiles;
+        }
+
+        // Top Right joint
+        if (prefabPosition == TileWallPosition.TopRight)
+        {
+            // Right tile
+            if (gridPosition.x + 1 <= _xMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
+                TileWallPosition.Left));
+            }
+
+            // UpperRight tile
+            if (gridPosition.x + 1 <= _xMax && gridPosition.y + 1 <= _yMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y + 1)],
+                TileWallPosition.TopLeft));
+            }
+
+            // Upper tile
+            if (gridPosition.y + 1 <= _yMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
+                TileWallPosition.Top));
+            }
+
+            return neighbourTiles;
+        }
+
+        // Bottom Left joint
+        if (prefabPosition == TileWallPosition.BottomLeft)
+        {
+            // Left tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
+                TileWallPosition.Left));
+
+            // LowerLeft tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y - 1)],
+                TileWallPosition.TopLeft));
+
+            // Lower tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
+                TileWallPosition.Top));
+
+            return neighbourTiles;
+        }
+
+        // Bottom Right joint
+        if (prefabPosition == TileWallPosition.BottomRight)
+        {
+            // Right tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
+                TileWallPosition.Left));
+
+            // LowerRight tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y - 1)],
+                TileWallPosition.TopLeft));
+
+            // Lower tile
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
+                TileWallPosition.Top));
+
+            return neighbourTiles;
+        }
+
+        // Left wall
+        if (prefabPosition == TileWallPosition.Left)
+        {
+            // Left tile, Right wall position
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
+                TileWallPosition.Right));
+
+            return neighbourTiles;
+        }
+
+        // Right wall
+        if (prefabPosition == TileWallPosition.Right)
+        {
+            // Right tile, Left wall position
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
+                TileWallPosition.Left));
+
+            return neighbourTiles;
+        }
+
+        // Top wall
+        if (prefabPosition == TileWallPosition.Top)
+        {
+            // Upper tile, Bottom wall position
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
+                TileWallPosition.Bottom));
+
+            return neighbourTiles;
+        }
+
+        // Bottom wall
+        if (prefabPosition == TileWallPosition.Bottom)
+        {
+            // Lower tile, Top wall position
+            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+                _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
+                TileWallPosition.Top));
+
+            return neighbourTiles;
+        }
+        throw new Exception("Error in determining neighbours of tile");
+    }
+
+    #endregion
 }
 
 // Class for being able to assign strategies in editor
