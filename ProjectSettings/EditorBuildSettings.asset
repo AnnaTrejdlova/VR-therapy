@@ -6,10 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/InitScene.unity
+    guid: 7271dde81ac37a64a8d67d0be6b04ea1
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: bd9605cd5351a6d43962f3abc8e6384d
   - enabled: 1
-    path: Assets/Scenes/Starting Scene.unity
+    path: Assets/Scenes/VRStarting.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/Scenes/Room.unity
@@ -17,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ESCMenu.unity
     guid: d58580ee6798ce94180af131f8580b2d
+  - enabled: 1
+    path: Assets/_Features/Utilities/_Scene/Utilities.unity
+    guid: 1859765965f5e5e4e8991f673d69b0ee
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 75e32cfd0e27168468bc336d5f14dafb,
       type: 2}

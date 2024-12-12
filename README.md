@@ -26,7 +26,7 @@ Využití virtuálních technologií pro pacienty se zhoršenými kognitivními 
 
 ### Předpoklady
 
-Nainstalovaný Unity Editor verze `2021.3.11f1` s Android modulem (pro Oculus) \
+Nainstalovaný Unity Editor verze `2022.3.51f1` s Android modulem (pro Oculus)
 Nainstalovaný https://git-lfs.com/
 
 ### Instalace

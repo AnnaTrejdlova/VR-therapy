@@ -1,0 +1,4 @@
+public enum SoundType
+{
+    click
+}
