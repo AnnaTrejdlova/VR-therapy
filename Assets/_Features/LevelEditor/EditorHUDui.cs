@@ -11,4 +11,8 @@ public class EditorHUDui : MonoBehaviour {
     public void OnWallModeClick() {
         LevelEditorManager.Instance.ChangeState(EditorState.PlacingWalls);
     }
+
+    public void OnWallDeleteModeClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.RemovingWalls);
+    }
 }

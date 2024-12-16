@@ -8,11 +8,11 @@ public class ObjectRemoving : TileInteractionStrategy {
     }
 
     public override void OnTileHover(Tile tile) {
-        tile.ToggleHighlightMaterial(true);
+        tile.ChangeObjectMaterial(EditorObjectManager.Instance.RemovingPreviewMaterial);
     }
 
     public override void OnTileUnhover(Tile tile) {
-        tile.ToggleHighlightMaterial(false);
+        tile.ChangeObjectMaterialToOriginal();
     }
 
     void RemoveObjectFromTile(Tile tile) {

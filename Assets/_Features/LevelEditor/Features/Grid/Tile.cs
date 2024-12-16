@@ -57,6 +57,7 @@ public class Tile : MonoBehaviour, IClickable {
         foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
             GameObject wall = entry.Value;
             wall.GetComponent<MeshRenderer>().material = wallMaterial;
+            wall.AddComponent<EditorObject>();
         }
         PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     }
@@ -122,7 +123,6 @@ public class Tile : MonoBehaviour, IClickable {
         }
     }
 
-
     #endregion
 
     #region Adding/Removing objects
@@ -144,8 +144,16 @@ public class Tile : MonoBehaviour, IClickable {
         // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
         addedGameObject = Instantiate(obj, transform.position, Quaternion.identity);
         addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        addedGameObject.AddComponent<EditorObject>();
     }
 
+    public void ChangeObjectMaterial(Material material) {
+        addedGameObject?.GetComponent<EditorObject>().SetMaterial(material);
+    }
+
+    public void ChangeObjectMaterialToOriginal() {
+        addedGameObject?.GetComponent<EditorObject>().RestoreOriginalMaterials();
+    }
     #endregion
 
     #region IClickable interface
