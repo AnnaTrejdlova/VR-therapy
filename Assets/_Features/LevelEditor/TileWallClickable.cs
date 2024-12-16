@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class TileWallClickable : MonoBehaviour, IClickable {
+public class TileWallClickable: MonoBehaviour, IClickable {
 
-    public TileWallPosition position;
     public Material HighlightMaterial;
 
     private Material BaseMaterial;
     private MeshRenderer meshRenderer;
     private Outline outline;
-    public Tile relatedTile;
+    private Tile relatedTile;
     public Vector2Int positionInTile;
+    public TileWallPosition position;
 
     void OnEnable() {
         outline = gameObject.GetComponent<Outline>();
@@ -21,16 +22,19 @@ public class TileWallClickable : MonoBehaviour, IClickable {
 
     public void OnClick() {
         relatedTile.clickedTile = this;
-        WallManager.Instance.WallPointClick(relatedTile, this, position);
+        //  WallManager.Instance.WallPointClick(relatedTile, this, position);
+        TileManager.Instance.TileClickHandle(relatedTile, position);
     }
 
     public void OnHoverEnter() {
         relatedTile.hoveredTile = this;
-        WallManager.Instance.WallPointEnterHover(relatedTile, this, position);
+        //     WallManager.Instance.WallPointEnterHover(relatedTile, this, position);
+        TileManager.Instance.TileHoverEnterHandle(relatedTile, position);
     }
 
     public void OnHoverExit() {
-        WallManager.Instance.WallPointExitHover(relatedTile, this);
+        //     WallManager.Instance.WallPointExitHover(relatedTile, this);
+        TileManager.Instance.TileHoverExitHandle(relatedTile, position);
     }
 
     public void ToggleOutline(bool toggleOn) {
@@ -45,8 +49,7 @@ public class TileWallClickable : MonoBehaviour, IClickable {
         }
     }
 
-    public Vector2Int GetGridPosition()
-    {
+    public Vector2Int GetGridPosition() {
         return positionInTile;
     }
 }
@@ -62,3 +65,4 @@ public enum TileWallPosition {
     Right,
     Bottom,
 }
+

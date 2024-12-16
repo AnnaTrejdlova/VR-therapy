@@ -87,6 +87,17 @@ public class TileManager : Singleton<TileManager> {
     public void TileHoverExitHandle(Tile tile) {
         FindStrategy(LevelEditorManager.Instance.GetState()).OnTileUnhover(tile);
     }
+    public void TileClickHandle(Tile tile, TileWallPosition position) {
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileClick(tile, position);
+    }
+
+    public void TileHoverEnterHandle(Tile tile, TileWallPosition position) {
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileHover(tile, position);
+    }
+
+    public void TileHoverExitHandle(Tile tile, TileWallPosition position) {
+        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileUnhover(tile, position);
+    }
 
     #endregion
 
@@ -114,7 +125,7 @@ public class TileManager : Singleton<TileManager> {
 
     # region Support functions
 
-    ITileInteractionStrategy FindStrategy(EditorState state) {
+    TileInteractionStrategy FindStrategy(EditorState state) {
         foreach (var strat in tileInteractionStrategyEntries) {
             if (strat.state == state) {
                 return strat.GetStrategy();
@@ -291,7 +302,7 @@ public class TileInteractionStrategyEntry {
     public EditorState state;
     public MonoBehaviour strategy;
 
-    public ITileInteractionStrategy GetStrategy() {
-        return strategy as ITileInteractionStrategy;
+    public TileInteractionStrategy GetStrategy() {
+        return strategy as TileInteractionStrategy;
     }
 }

@@ -142,7 +142,7 @@ public class Tile : MonoBehaviour, IClickable {
         }
         // must not be a child of the tile because of the scale shenanigans
         // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
-        addedGameObject = Instantiate(obj, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+        addedGameObject = Instantiate(obj, transform.position, Quaternion.identity);
         addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
     }
 

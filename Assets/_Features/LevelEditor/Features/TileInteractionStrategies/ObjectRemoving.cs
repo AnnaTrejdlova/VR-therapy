@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectRemoving : MonoBehaviour, ITileInteractionStrategy {
-    public void OnTileClick(Tile tile) {
+public class ObjectRemoving : TileInteractionStrategy {
+    public override void OnTileClick(Tile tile) {
         RemoveObjectFromTile(tile);
     }
 
-    public void OnTileHover(Tile tile) {
+    public override void OnTileHover(Tile tile) {
         tile.ToggleHighlightMaterial(true);
     }
 
-    public void OnTileUnhover(Tile tile) {
+    public override void OnTileUnhover(Tile tile) {
         tile.ToggleHighlightMaterial(false);
     }
 
