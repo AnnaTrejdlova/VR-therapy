@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class WallPlacing : TileInteractionStrategy {
+public class WallPlacing: TileInteractionStrategy {
 
     /// <summary>
     /// Wall placing logic
@@ -48,10 +49,12 @@ public class WallPlacing : TileInteractionStrategy {
     /// <param name="tile">Parrent <see cref="Tile"/></param>
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileHover(Tile tile, TileWallPosition position) {
-      //  hoveredTile.ToggleHighlightMaterial(true);
-
-        if (_placingWall)
+        //  hoveredTile.ToggleHighlightMaterial(true);
+        if (_placingWall) {
             ShowWallsPreview(tile, position);
+        } else {
+            tile.AddWallJointPreview(_wallJointPrefab, position);
+        }
     }
 
     /// <summary>
@@ -60,7 +63,8 @@ public class WallPlacing : TileInteractionStrategy {
     /// <param name="tile">Parrent <see cref="Tile"/></param>
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileUnhover(Tile tile) {
-     //   hoveredTile.ToggleHighlightMaterial(false);
+        if(!_placingWall)
+            tile.ClearWallPreviews();
     }
 
     #region Create walls / clear wall preview

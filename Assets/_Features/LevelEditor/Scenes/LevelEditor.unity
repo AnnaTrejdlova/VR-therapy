@@ -1541,7 +1541,7 @@ PrefabInstance:
     - target: {fileID: 8348834812933369452, guid: 34a25098fdc730747aa349c4ce7d024f,
         type: 3}
       propertyPath: m_text
-      value: WallMode
+      value: DeleteWallMode
       objectReference: {fileID: 0}
     - target: {fileID: 8348834812933369452, guid: 34a25098fdc730747aa349c4ce7d024f,
         type: 3}

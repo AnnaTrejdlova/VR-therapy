@@ -34,7 +34,7 @@ public class TileWallClickable: MonoBehaviour, IClickable {
 
     public void OnHoverExit() {
         //     WallManager.Instance.WallPointExitHover(relatedTile, this);
-        TileManager.Instance.TileHoverExitHandle(relatedTile, position);
+        TileManager.Instance.TileHoverExitHandle(relatedTile);
     }
 
     public void ToggleOutline(bool toggleOn) {
