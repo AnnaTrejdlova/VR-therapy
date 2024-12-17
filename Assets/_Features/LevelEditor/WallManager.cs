@@ -28,10 +28,14 @@ public class WallManager : Singleton<WallManager>
     {
         if (!_placingWall)
         {
-            tile.AddWallJointPreview(WallJointPrefab, position);
+            //tile.AddWallJointPreview(WallJointPrefab, position);
             _placingWall = true;
             _wallPlacingStartingTile = tile;
             _wallPlacingStartingPosition = position;
+            ShowWallsPreview(tile, position);
+            foreach (var item in tile.AddedWallsDictionary.Keys) {
+                print(item + " ");
+            }
         }
         else
         {
@@ -106,7 +110,7 @@ public class WallManager : Singleton<WallManager>
                 if (_tilesLine.Count() > 1)
                 {
                     startTilePosition = _wallPlacingStartingTile.GetGridPosition();
-                    endTilePosition = _tilesLine.Last().GetGridPosition();
+                    endTilePosition = endTile.GetGridPosition();
                 }
                 else
                 {
@@ -117,7 +121,7 @@ public class WallManager : Singleton<WallManager>
                 placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
 
-                if (!currentTile.ContainsPreview(jointOrientations[0]) && !NeighbourTilesContainsPreview(currentTile, jointOrientations[0]))
+                if (!ContainsPrefab(currentTile, jointOrientations[0]))
                 {
                     currentTile.AddWallJointPreview(WallJointPrefab, jointOrientations[0]);
                 }
@@ -177,6 +181,7 @@ public class WallManager : Singleton<WallManager>
     {
         List<Tuple<Tile, TileWallPosition>> tileNeighbours = TileManager.Instance.GetNeighbourTiles(centerTile, prefabPosition);
 
+
         foreach (var tuple in tileNeighbours)
         {
             if (tuple.Item1.ContainsWall(tuple.Item2))
@@ -190,10 +195,7 @@ public class WallManager : Singleton<WallManager>
 
     private bool ContainsPrefab(Tile currentTile, TileWallPosition prefabPosition)
     {
-        if (currentTile.ContainsPreview(prefabPosition) || NeighbourTilesContainsPreview(currentTile, prefabPosition))
-            return true;
-
-        return false;
+        return currentTile.ContainsWall(prefabPosition) || NeighbourTilesContainsPreview(currentTile, prefabPosition);
     }
 
     #endregion

@@ -93,7 +93,7 @@ public class TileManager : Singleton<TileManager> {
     #region Grid setup
 
     public void SetUpGrid(int width, int height) {
-        _yMax = width;
+        _xMax = width;
         _yMax = height;
         for (int i = 0; i <= width; i++) {
             for (int j = 0; j <= height; j++) {
@@ -141,7 +141,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                     _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
-                    TileWallPosition.Left));
+                    TileWallPosition.TopRight));
             }
 
             // UpperLeft tile
@@ -149,7 +149,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                     _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y + 1)],
-                    TileWallPosition.TopLeft));
+                    TileWallPosition.BottomRight));
             }
 
             // Upper tile
@@ -157,7 +157,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
-                TileWallPosition.Top));
+                TileWallPosition.BottomLeft));
             }
 
             return neighbourTiles;
@@ -171,7 +171,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
-                TileWallPosition.Left));
+                TileWallPosition.TopLeft));
             }
 
             // UpperRight tile
@@ -179,7 +179,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y + 1)],
-                TileWallPosition.TopLeft));
+                TileWallPosition.BottomLeft));
             }
 
             // Upper tile
@@ -187,7 +187,7 @@ public class TileManager : Singleton<TileManager> {
             {
                 neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
-                TileWallPosition.Top));
+                TileWallPosition.BottomRight));
             }
 
             return neighbourTiles;
@@ -197,19 +197,25 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.BottomLeft)
         {
             // Left tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x - 1 >= 0) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
-                TileWallPosition.Left));
+                TileWallPosition.BottomRight));
+            }
 
             // LowerLeft tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x - 1 >= 0 && gridPosition.y - 1 >= 0) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y - 1)],
-                TileWallPosition.TopLeft));
+                TileWallPosition.TopRight));
+            }
 
             // Lower tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.y - 1 >= 0) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
-                TileWallPosition.Top));
+                TileWallPosition.TopLeft));
+            }
 
             return neighbourTiles;
         }
@@ -218,19 +224,25 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.BottomRight)
         {
             // Right tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x + 1 <= _xMax) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
-                TileWallPosition.Left));
+                TileWallPosition.BottomLeft));
+            }
 
             // LowerRight tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x + 1 <= _xMax && gridPosition.y - 1 >= 0) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y - 1)],
                 TileWallPosition.TopLeft));
+            }
 
             // Lower tile
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.y - 1 >= 0) {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
-                TileWallPosition.Top));
+                TileWallPosition.TopRight));
+            }
 
             return neighbourTiles;
         }
@@ -239,9 +251,12 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.Left)
         {
             // Left tile, Right wall position
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x - 1 >= 0)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x - 1, gridPosition.y)],
                 TileWallPosition.Right));
+            }
 
             return neighbourTiles;
         }
@@ -250,9 +265,12 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.Right)
         {
             // Right tile, Left wall position
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.x + 1 <= _xMax)
+            {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x + 1, gridPosition.y)],
                 TileWallPosition.Left));
+            }
 
             return neighbourTiles;
         }
@@ -261,9 +279,12 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.Top)
         {
             // Upper tile, Bottom wall position
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.y + 1 <= _yMax)
+                {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y + 1)],
                 TileWallPosition.Bottom));
+            }
 
             return neighbourTiles;
         }
@@ -272,12 +293,16 @@ public class TileManager : Singleton<TileManager> {
         if (prefabPosition == TileWallPosition.Bottom)
         {
             // Lower tile, Top wall position
-            neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
+            if (gridPosition.y - 1 >= 0)
+                {
+                neighbourTiles.Add(new Tuple<Tile, TileWallPosition>(
                 _tileDictionary[new Vector2Int(gridPosition.x, gridPosition.y - 1)],
                 TileWallPosition.Top));
+            }
 
             return neighbourTiles;
         }
+
         throw new Exception("Error in determining neighbours of tile");
     }
 

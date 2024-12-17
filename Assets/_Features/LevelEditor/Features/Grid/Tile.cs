@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IClickable {
@@ -25,8 +26,8 @@ public class Tile : MonoBehaviour, IClickable {
     private Outline outline;
     private GameObject addedGameObject; // what you put into it
     private Vector2Int gridPosition;
-    private Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
-    private Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    public Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
 
     void Awake() {
         classicCollider = GetComponent<BoxCollider>();  
@@ -53,12 +54,15 @@ public class Tile : MonoBehaviour, IClickable {
 
     
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
-        AddedWallsDictionary = PreviewWallsDictionary;
-        foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
-            GameObject wall = entry.Value;
-            wall.GetComponent<MeshRenderer>().material = wallMaterial;
+        if (PreviewWallsDictionary.Count != 0) {
+            AddedWallsDictionary.AddRange(PreviewWallsDictionary);
+            foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
+                GameObject wall = entry.Value;
+                wall.GetComponent<MeshRenderer>().material = wallMaterial;
+            }
+
+            PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
         }
-        PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     }
 
     public void AddWallJointPreview(GameObject wallJointPrefab, TileWallPosition orientation) {
@@ -240,7 +244,7 @@ public class Tile : MonoBehaviour, IClickable {
 
     public bool ContainsWall(TileWallPosition orientation)
     {
-        return AddedWallsDictionary.ContainsKey(orientation);
+        return AddedWallsDictionary.ContainsKey(orientation) || ContainsPreview(orientation);
     }
 
     public TileWallPosition GetLastOrientation()
