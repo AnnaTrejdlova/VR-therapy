@@ -29,6 +29,7 @@ public class Initializer : MonoBehaviour
         if (loadTask.Result)
         {
             UImanager.Instance.HideUI(UIType.LoadingScreen);
+            var unLoadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.InitScene);
         }
         else
         {

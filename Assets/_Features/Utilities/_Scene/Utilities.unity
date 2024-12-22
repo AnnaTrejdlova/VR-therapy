@@ -465,7 +465,7 @@ PrefabInstance:
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}
       propertyPath: scenes.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}
@@ -490,7 +490,12 @@ PrefabInstance:
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}
       propertyPath: scenes.Array.data[4].m_SceneName
-      value: Testing
+      value: LevelEditor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
+        type: 3}
+      propertyPath: scenes.Array.data[5].m_SceneName
+      value: InitScene
       objectReference: {fileID: 0}
     - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
         type: 3}
@@ -520,7 +525,13 @@ PrefabInstance:
         type: 3}
       propertyPath: scenes.Array.data[4].m_SceneAsset
       value: 
-      objectReference: {fileID: 102900000, guid: 43bf2853f18fcff4895996d8a56989a4,
+      objectReference: {fileID: 102900000, guid: 75b52210d25b2694c9ff12558f268b1c,
+        type: 3}
+    - target: {fileID: 4141608797493780776, guid: 614837752bae329479394d2922cc21b1,
+        type: 3}
+      propertyPath: scenes.Array.data[5].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 7271dde81ac37a64a8d67d0be6b04ea1,
         type: 3}
     - target: {fileID: 4141608797493780777, guid: 614837752bae329479394d2922cc21b1,
         type: 3}

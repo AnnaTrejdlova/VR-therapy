@@ -4,5 +4,7 @@ public enum SceneType
     MainMenu,
     Room,
     StartingScene,
-    Testing
+    Testing,
+    LevelEditor,
+    InitScene
 }
