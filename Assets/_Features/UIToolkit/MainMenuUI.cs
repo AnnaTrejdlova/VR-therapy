@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ public class MainMenuUI : MonoBehaviour
 
         Button startNonVRButton = root.Q<Button>("StartNonVR");
         startNonVRButton.clicked += StartNonVRButton;
+
+        Button editorButton = root.Q<Button>("EditorButton");
+        editorButton.clicked += StartEditorButton;
 
         Button exitButton = root.Q<Button>("ExitButton");
         exitButton.clicked += ExitButton;
@@ -135,6 +139,23 @@ public class MainMenuUI : MonoBehaviour
         }
         else
         {
+            Debug.LogError("Failed to load scene.");
+        }
+    }
+
+    private void StartEditorButton() {
+        StartCoroutine(LoadEditorScene());
+    }
+
+    private IEnumerator LoadEditorScene() {
+        // Wait until the scene loading task is complete
+        var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.LevelEditor, 0f);
+        yield return new WaitUntil(() => loadTask.IsCompleted);
+        if (loadTask.Result) {
+            // after its loaded do something
+            SceneLoadingManager.Instance.SetActiveScene(SceneType.LevelEditor);
+            var unLoadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(sceneToUnload);
+        } else {
             Debug.LogError("Failed to load scene.");
         }
     }
