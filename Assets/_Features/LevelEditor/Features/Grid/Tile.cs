@@ -56,7 +56,7 @@ public class Tile : MonoBehaviour, IClickable {
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
         if (PreviewWallsDictionary.Count == 0) return;
 
-        AddedWallsDictionary.AddRange(PreviewWallsDictionary);
+        AddedWallsDictionary = PreviewWallsDictionary;
         foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
             GameObject wall = entry.Value;
             wall.GetComponent<MeshRenderer>().material = wallMaterial;
@@ -130,6 +130,8 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     public void RemoveWall(TileWallPosition orientation) {
+        if (!AddedWallsDictionary.ContainsKey(orientation)) return;
+
         AddedWallsDictionary[orientation].SetActive(false);
         AddedWallsDictionary.Remove(orientation);
     }

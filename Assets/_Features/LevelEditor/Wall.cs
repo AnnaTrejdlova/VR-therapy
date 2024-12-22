@@ -18,6 +18,8 @@ public class Wall : MonoBehaviour, IClickable {
     public void OnClick() {
         if(LevelEditorManager.Instance.GetState() == EditorState.RemovingWalls) {
             if (tile == null) return;
+            print($"Trying to remove myself from my tile on {tile.GetGridPosition()}");
+            print($"Trying to remove myself my orientation {orientation}");
             tile.RemoveWall(orientation);
         }
     }
