@@ -54,15 +54,18 @@ public class Tile : MonoBehaviour, IClickable {
 
     
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
-        if (PreviewWallsDictionary.Count != 0) {
-            AddedWallsDictionary.AddRange(PreviewWallsDictionary);
-            foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
-                GameObject wall = entry.Value;
-                wall.GetComponent<MeshRenderer>().material = wallMaterial;
-            }
+        if (PreviewWallsDictionary.Count == 0) return;
 
-            PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+        AddedWallsDictionary.AddRange(PreviewWallsDictionary);
+        foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
+            GameObject wall = entry.Value;
+            wall.GetComponent<MeshRenderer>().material = wallMaterial;
+            Wall wallScript = wall.AddComponent<Wall>();
+            wallScript.tile = this;
+            wallScript.orientation = entry.Key;
         }
+        
+        PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     }
 
     public void AddWallJointPreview(GameObject wallJointPrefab, TileWallPosition orientation) {
@@ -126,6 +129,10 @@ public class Tile : MonoBehaviour, IClickable {
         }
     }
 
+    public void RemoveWall(TileWallPosition orientation) {
+        AddedWallsDictionary[orientation].SetActive(false);
+        AddedWallsDictionary.Remove(orientation);
+    }
 
     #endregion
 
@@ -146,10 +153,18 @@ public class Tile : MonoBehaviour, IClickable {
         }
         // must not be a child of the tile because of the scale shenanigans
         // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
-        addedGameObject = Instantiate(obj, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+        addedGameObject = Instantiate(obj, transform.position, Quaternion.identity);
         addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
+        addedGameObject.AddComponent<EditorObject>();
     }
 
+    public void ChangeObjectMaterial(Material material) {
+        addedGameObject?.GetComponent<EditorObject>().SetMaterial(material);
+    }
+
+    public void ChangeObjectMaterialToOriginal() {
+        addedGameObject?.GetComponent<EditorObject>().RestoreOriginalMaterials();
+    }
     #endregion
 
     #region IClickable interface

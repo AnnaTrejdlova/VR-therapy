@@ -7,6 +7,7 @@ public class EditorObjectManager : Singleton<EditorObjectManager> {
     public GameObject UIButtonPrefab;
     public GameObject UIContainerRefference;
     public List<GameObject> ModelList = new List<GameObject>();
+    public Material RemovingPreviewMaterial;
 
     GameObject selectedObject;
 

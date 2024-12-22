@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPlacing : MonoBehaviour, ITileInteractionStrategy {
-    public void OnTileClick(Tile tile) {
+public class ObjectPlacing : TileInteractionStrategy {
+    public override void OnTileClick(Tile tile) {
         PlaceObjectOnTile(tile);
     }
 
-    public void OnTileHover(Tile tile) {
+    public override void OnTileHover(Tile tile) {
         tile.ToggleHighlightMaterial(true);
     }
 
-    public void OnTileUnhover(Tile tile) {
+    public override void OnTileUnhover(Tile tile) {
         tile.ToggleHighlightMaterial(false);
     }
 
