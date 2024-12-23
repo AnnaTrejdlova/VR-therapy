@@ -33,10 +33,11 @@ public class WallPlacing: TileInteractionStrategy {
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileClick(Tile tile, TileWallPosition position) {
         if (!_placingWall) {
-            tile.AddWallJointPreview(_wallJointPrefab, position);
+            
             _placingWall = true;
             _wallPlacingStartingTile = tile;
             _wallPlacingStartingPosition = position;
+            ShowWallsPreview(tile, position);
         } else {
             CreatePreviewedWalls();
             _placingWall = false;
@@ -108,10 +109,15 @@ public class WallPlacing: TileInteractionStrategy {
                     endTilePosition = _tilesLine[0].hoveredTile.GetGridPosition();
                 }
 
+                
+
                 placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
+                print($"{placementDirection}");
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
 
-                if (!currentTile.ContainsPreview(jointOrientations[0]) && !NeighbourTilesContainsPreview(currentTile, jointOrientations[0])) {
+                print($"{jointOrientations[0]}, {jointOrientations[1]}");
+
+                if (!ContainsPrefab(currentTile, jointOrientations[0])) {
                     currentTile.AddWallJointPreview(_wallJointPrefab, jointOrientations[0]);
                 }
 
@@ -172,8 +178,11 @@ public class WallPlacing: TileInteractionStrategy {
     }
 
     private bool ContainsPrefab(Tile currentTile, TileWallPosition prefabPosition) {
-        if (currentTile.ContainsPreview(prefabPosition) || NeighbourTilesContainsPreview(currentTile, prefabPosition))
+        if (currentTile.ContainsWall(prefabPosition))
             return true;
+        else if (NeighbourTilesContainsPreview(currentTile, prefabPosition)) {
+            print($"Obsahuje nějaký soused okolo {currentTile} {prefabPosition}? {NeighbourTilesContainsPreview(currentTile, prefabPosition)}");
+        }
 
         return false;
     }

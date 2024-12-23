@@ -56,7 +56,12 @@ public class Tile : MonoBehaviour, IClickable {
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
         if (PreviewWallsDictionary.Count == 0) return;
 
-        AddedWallsDictionary = PreviewWallsDictionary;
+        foreach (var entry in PreviewWallsDictionary) {
+            if (!AddedWallsDictionary.TryGetValue(entry.Key, out _)) {
+                AddedWallsDictionary.Add(entry.Key, entry.Value);
+            }
+        }
+
         foreach (KeyValuePair<TileWallPosition, GameObject> entry in AddedWallsDictionary) {
             GameObject wall = entry.Value;
             wall.GetComponent<MeshRenderer>().material = wallMaterial;
@@ -261,7 +266,9 @@ public class Tile : MonoBehaviour, IClickable {
 
     public bool ContainsWall(TileWallPosition orientation)
     {
-        return AddedWallsDictionary.ContainsKey(orientation) || ContainsPreview(orientation);
+        print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy}");
+        print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {ContainsPreview(orientation)}");
+        return (AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy) || ContainsPreview(orientation);
     }
 
     public TileWallPosition GetLastOrientation()
