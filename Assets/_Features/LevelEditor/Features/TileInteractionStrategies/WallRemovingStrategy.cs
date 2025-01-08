@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class WallRemovingStrategy: TileInteractionStrategy {
 
-    // IT will actually work by clicking directly on the wall!!!
+    // It actually works by clicking directly on the wall
 
-    public override void OnTileClick(Tile tile, TileWallPosition position) {
-        
-    }
+    #region TileInteractionInterface
 
-    
-    public override void OnTileHover(Tile tile, TileWallPosition position) {
-        //  hoveredTile.ToggleHighlightMaterial(true);
+    public override void OnTileClick(Tile tile, TileWallPosition position) {}
+    public override void OnTileHover(Tile tile, TileWallPosition position) {}
+    public override void OnTileUnhover(Tile tile) {}
 
-    }
-
-    
-    public override void OnTileUnhover(Tile tile) {
-        //   hoveredTile.ToggleHighlightMaterial(false);
-    }
+    #endregion
 }
