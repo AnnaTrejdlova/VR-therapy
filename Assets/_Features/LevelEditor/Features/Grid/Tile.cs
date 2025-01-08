@@ -143,7 +143,7 @@ public class Tile : MonoBehaviour, IClickable {
 
     #endregion
 
-    #region Adding/Removing objects
+    #region Manipulating added objects
 
     public void AddObjectToTile(GameObject obj) {
         InstantiateAddedObject(obj);
@@ -152,6 +152,10 @@ public class Tile : MonoBehaviour, IClickable {
     public void RemoveObjectFromTile() {
         Destroy(addedGameObject);
         addedGameObject = null;
+    }
+
+    public void RotateOject(float angle = 45f) {
+        addedGameObject.transform.Rotate(new Vector3(0, angle, 0));
     }
 
     void InstantiateAddedObject(GameObject obj) {
