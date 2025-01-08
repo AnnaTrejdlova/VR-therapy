@@ -18,8 +18,8 @@ public class Wall : MonoBehaviour, IClickable {
     public void OnClick() {
         if(LevelEditorManager.Instance.GetState() == EditorState.RemovingWalls) {
             if (tile == null) return;
-            print($"Trying to remove myself from my tile on {tile.GetGridPosition()}");
-            print($"Trying to remove myself my orientation {orientation}");
+
+            // Remove yourself
             tile.RemoveWall(orientation);
         }
     }
@@ -27,6 +27,11 @@ public class Wall : MonoBehaviour, IClickable {
     public void OnHoverEnter() {
         if (LevelEditorManager.Instance.GetState() == EditorState.RemovingWalls) {
             if (_meshRenderer == null) return;
+            // if not in remove mode
+            if (WallRemovingManager.Instance.GetDragDelete()) {
+                tile.RemoveWall(orientation);
+                return;
+            }
             _meshRenderer.material = EditorObjectManager.Instance.RemovingPreviewMaterial;
         }
     }
@@ -34,6 +39,10 @@ public class Wall : MonoBehaviour, IClickable {
     public void OnHoverExit() {
         if (LevelEditorManager.Instance.GetState() == EditorState.RemovingWalls) {
             if (_meshRenderer == null) return;
+            // if not in remove mode
+            if (WallRemovingManager.Instance.GetDragDelete()) {
+                return;
+            }
             _meshRenderer.material = _originalMaterial;
         }
     }

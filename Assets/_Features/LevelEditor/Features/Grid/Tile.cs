@@ -266,8 +266,8 @@ public class Tile : MonoBehaviour, IClickable {
 
     public bool ContainsWall(TileWallPosition orientation)
     {
-        print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy}");
-        print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {ContainsPreview(orientation)}");
+   //     print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy}");
+    //    print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {ContainsPreview(orientation)}");
         return (AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy) || ContainsPreview(orientation);
     }
 
