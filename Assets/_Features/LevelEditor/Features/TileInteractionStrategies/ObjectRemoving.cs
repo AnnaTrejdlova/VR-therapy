@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ObjectRemoving : TileInteractionStrategy {
     public override void OnTileClick(Tile tile) {
-        RemoveObjectFromTile(tile);
+        tile.RemoveObjectFromTile();
     }
 
     public override void OnTileHover(Tile tile) {
@@ -13,12 +9,5 @@ public class ObjectRemoving : TileInteractionStrategy {
 
     public override void OnTileUnhover(Tile tile) {
         tile.ChangeObjectMaterialToOriginal();
-    }
-
-    void RemoveObjectFromTile(Tile tile) {
-        if (tile.isTileOccupied()) {
-            tile.RemoveObjectFromTile();
-            return;
-        }
     }
 }
