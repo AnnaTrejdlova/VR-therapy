@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Features/UIToolkit/LevelEditor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=5ceee86ac9f0dba4195fd5d7ce56e7b1&amp;type=3#LevelEditor" />
+    <ui:VisualElement name="tile" />
+</ui:UXML>
