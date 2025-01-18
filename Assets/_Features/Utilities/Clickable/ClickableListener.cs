@@ -7,6 +7,7 @@ public class ClickableListener : MonoBehaviour {
 
     Camera mainCamera;
     IClickable currentHoveredObject;
+    public LayerMask notRaycastTargetLayer;
 
 
     private void Start() {
@@ -23,8 +24,10 @@ public class ClickableListener : MonoBehaviour {
 
     void HandleHover() {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo)) {
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, ~notRaycastTargetLayer)) {
             IClickable clickedObject = hitInfo.collider.GetComponent<IClickable>();
+
             if (clickedObject != currentHoveredObject) {
                 if (currentHoveredObject != null) {
                     currentHoveredObject.OnHoverExit();

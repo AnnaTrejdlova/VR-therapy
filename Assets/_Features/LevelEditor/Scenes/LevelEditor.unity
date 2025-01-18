@@ -1349,6 +1349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fbadf1b31656439ffe51087b04ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notRaycastTargetLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1701126711
 GameObject:
   m_ObjectHideFlags: 0
