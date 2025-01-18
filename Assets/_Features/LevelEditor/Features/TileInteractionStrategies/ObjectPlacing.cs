@@ -1,24 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPlacing : TileInteractionStrategy {
+public class ObjectPlacing: TileInteractionStrategy {
+    private bool _placingObject = false;
     public override void OnTileClick(Tile tile) {
-        PlaceObjectOnTile(tile);
+        _placingObject = true;
+        if (EditorObjectManager.Instance.GetSelectedObject() != null) {
+            tile.AddObjectToTile(EditorObjectManager.Instance.GetSelectedObject());
+        }
     }
 
     public override void OnTileHover(Tile tile) {
-        tile.ToggleHighlightMaterial(true);
+        _placingObject = false;
+        if (EditorObjectManager.Instance.GetSelectedObject() != null) {
+            tile.AddObjectPreviewToTile(EditorObjectManager.Instance.GetSelectedObject());
+        }
     }
 
     public override void OnTileUnhover(Tile tile) {
-        tile.ToggleHighlightMaterial(false);
-    }
-
-    void PlaceObjectOnTile(Tile tile) {
-        if (EditorObjectManager.Instance.GetSelectedObject() == null) {
-            return;
+        if (!_placingObject) {
+            tile.RemoveObjectPreviewFromTile();
         }
-        tile.AddObjectToTile(EditorObjectManager.Instance.GetSelectedObject());
     }
 }
