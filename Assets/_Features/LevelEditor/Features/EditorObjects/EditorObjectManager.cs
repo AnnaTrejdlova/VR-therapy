@@ -8,6 +8,7 @@ public class EditorObjectManager : Singleton<EditorObjectManager> {
     public GameObject UIContainerRefference;
     public List<GameObject> ModelList = new List<GameObject>();
     public Material RemovingPreviewMaterial;
+    public Material PreviewMaterial;
 
     GameObject selectedObject;
 
