@@ -43,7 +43,7 @@
 
 .tile {
     flex-grow: 1;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgb(82, 82, 82);
     align-self: center;
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);

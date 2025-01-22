@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1f47bb846ed0ff43826c847fc98bd5a, type: 3}
-  m_Name: Stul 1
+  m_Name: Zidle 1
   m_EditorClassIdentifier: 
-  Name: "Je\u017Eek St\u016Fl"
+  Name: "\u017Eid-le"
   EditorObjectType: 0
-  Model: {fileID: 919132149155446097, guid: fb7ca9ee03732144ba8aa3f62eb7950b, type: 3}
-  Texture: {fileID: 0}
-  UITexture: {fileID: 2800000, guid: bd7b4ce8960ccc04f8e5ec3a70810417, type: 3}
+  EditorObjectCategory: 0
+  Model: {fileID: 919132149155446097, guid: 118bc70017dba464496c3ff91a4d1855, type: 3}
+  Texture: {fileID: 2800000, guid: 0112ff355b5caae43ae554927d2a74a2, type: 3}
+  UITexture: {fileID: 2800000, guid: b842a3552259bd44386d17f611c84b50, type: 3}

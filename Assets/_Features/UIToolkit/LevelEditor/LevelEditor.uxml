@@ -24,7 +24,7 @@
                     <ui:Label text="Content of Tab 1" />
                     <ui:ScrollView name="item-list" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="flex-wrap: nowrap;">
                         <ui:VisualElement name="content" class="list-content">
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
+                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;); -unity-background-scale-mode: scale-to-fit;" />
                             <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
                             <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
                             <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />

@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4141608797493780779}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.230174, y: 10.286438, z: -14.967735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4141608797493780778
 MonoBehaviour:
@@ -58,11 +58,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scenes:
-  - m_SceneAsset: {fileID: 102900000, guid: fb1d2da4c5f7cf34a94bfcc18470f24b, type: 3}
+  - m_SceneAsset: {fileID: 0}
     m_SceneName: GameplayScene
-  - m_SceneAsset: {fileID: 102900000, guid: 76eee537e2248c244822bdcaeb5c2f30, type: 3}
+  - m_SceneAsset: {fileID: 0}
     m_SceneName: MainMenuScene
   - m_SceneAsset: {fileID: 102900000, guid: 1859765965f5e5e4e8991f673d69b0ee, type: 3}
     m_SceneName: Utilities
-  - m_SceneAsset: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  - m_SceneAsset: {fileID: 0}
     m_SceneName: _MAIN scene
