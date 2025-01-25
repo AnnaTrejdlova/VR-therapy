@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "Je\u017Eek St\u016Fl"
   EditorObjectType: 0
-  EditorObjectCategory: 0
+  furnitureSubcategory: 2
+  buildingSubcategory: 0
   Model: {fileID: 919132149155446097, guid: fb7ca9ee03732144ba8aa3f62eb7950b, type: 3}
   Texture: {fileID: 2800000, guid: bd7b4ce8960ccc04f8e5ec3a70810417, type: 3}
   UITexture: {fileID: 2800000, guid: 504b855d7e8ba944bad63efb33327c0a, type: 3}

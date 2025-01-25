@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "Bao st\u016Fl"
   EditorObjectType: 0
-  EditorObjectCategory: 0
+  furnitureSubcategory: 0
+  buildingSubcategory: 0
   Model: {fileID: 919132149155446097, guid: c03ae710d777f3940966a5a026047cb6, type: 3}
   Texture: {fileID: 2800000, guid: 025dfeb3f0f9fd848841b063f6db0b62, type: 3}
   UITexture: {fileID: 2800000, guid: be4838f7073c9ce4a9dea98d09bd2bb8, type: 3}

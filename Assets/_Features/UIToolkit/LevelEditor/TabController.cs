@@ -120,11 +120,17 @@ public class TabController: MonoBehaviour {
 
     private void FillObjectPanelWithContent(EditorObjectScriptable[] editorObjects)
     {
-        var inCategoryObjects = editorObjects;
-        //var inCategoryObjects = editorObjects.Where(obj =>
-        //    (SelectedTabCategory == EditorObjectCategory.Furniture && obj.EditorObjectCategory.Category is FurnitureSubcategory furnitureSubcategory && furnitureSubcategory == (FurnitureSubcategory)SelectedSubcategory.Category) ||
-        //    (SelectedTabCategory == EditorObjectCategory.Building && obj.EditorObjectCategory.Category is BuildingSubcategory buildingSubcategory && buildingSubcategory == (BuildingSubcategory)SelectedSubcategory.Category)
-        //).ToArray();
+        //var inCategoryObjects = editorObjects;
+        var inCategoryObjects = editorObjects
+            .Where(obj =>
+                (SelectedTabCategory == EditorObjectCategory.Furniture &&
+                 obj.EditorObjectType == EditorObjectCategory.Furniture &&
+                 obj.furnitureSubcategory == (FurnitureSubcategory)SelectedSubcategory.Category) ||
+                (SelectedTabCategory == EditorObjectCategory.Building &&
+                 obj.EditorObjectType == EditorObjectCategory.Building &&
+                 obj.buildingSubcategory == (BuildingSubcategory)SelectedSubcategory.Category))
+            .ToArray();
+
 
         // Populate tiles with new content
         for (int i = 0; i < Math.Max(inCategoryObjects.Length, TileQuery.Count()); i++)
