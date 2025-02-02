@@ -106,8 +106,15 @@ public class TabController: MonoBehaviour {
         SelectedObject = inCategoryObjects[evt.newValue];
         Debug.Log(SelectedObject.name);
 
-        LevelEditorManager.Instance.ChangeState(EditorState.PlacingObjects);
-        EditorObjectManager.Instance.SelectObject(SelectedObject.Model);
+        if (SelectedObject.EditorObjectType == EditorObjectCategory.Furniture) { // Is Furniture -> PlacingObjects
+            LevelEditorManager.Instance.ChangeState(EditorState.PlacingObjects);
+            EditorObjectManager.Instance.SelectObject(SelectedObject.Model);
+        } else if (SelectedObject.EditorObjectType == EditorObjectCategory.Building) { // Is building object -> PlacingWalls
+            if (((BuildingSubcategory)SelectedObject.Subcategory) == BuildingSubcategory.Wall) {
+                //EditorHUDui.OnWallModeClick();
+                LevelEditorManager.Instance.ChangeState(EditorState.PlacingWalls);
+            }
+        }
     }
 
     /// <summary>
@@ -140,10 +147,10 @@ public class TabController: MonoBehaviour {
             .Where(obj =>
                 (SelectedTabCategory == EditorObjectCategory.Furniture &&
                  obj.EditorObjectType == EditorObjectCategory.Furniture &&
-                 obj.furnitureSubcategory == (FurnitureSubcategory)SelectedSubcategory.Category) ||
+                 (FurnitureSubcategory)obj.Subcategory == (FurnitureSubcategory)SelectedSubcategory.Category) ||
                 (SelectedTabCategory == EditorObjectCategory.Building &&
                  obj.EditorObjectType == EditorObjectCategory.Building &&
-                 obj.buildingSubcategory == (BuildingSubcategory)SelectedSubcategory.Category))
+                 (BuildingSubcategory)obj.Subcategory == (BuildingSubcategory)SelectedSubcategory.Category))
             .ToList();
         FillObjectPanelWithContent();
     }

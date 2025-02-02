@@ -12,10 +12,10 @@ public class EditorObjectScriptable: ScriptableObject {
 
     // Category
     public EditorObjectCategory EditorObjectType;
-    [ShowIf("IsFurniture")]
-    public FurnitureSubcategory furnitureSubcategory;
-    [ShowIf("IsBuilding")]
-    public BuildingSubcategory buildingSubcategory;
+    [ShowIf("IsFurniture"), SerializeField]
+    private FurnitureSubcategory furnitureSubcategory;
+    [ShowIf("IsBuilding"), SerializeField]
+    private BuildingSubcategory buildingSubcategory;
 #pragma warning disable IDE0051 // Remove unused private members
     private bool IsFurniture() => EditorObjectType == EditorObjectCategory.Furniture;
     private bool IsBuilding() => EditorObjectType == EditorObjectCategory.Building;
@@ -87,6 +87,14 @@ public sealed class Subcategory<FurnitureSubcategory, BuildingSubcategory> {
 
     public static implicit operator Subcategory<FurnitureSubcategory, BuildingSubcategory>(BuildingSubcategory building)
         => new Subcategory<FurnitureSubcategory, BuildingSubcategory>(building);
+
+    public static explicit operator BuildingSubcategory(Subcategory<FurnitureSubcategory, BuildingSubcategory> v) {
+        return (BuildingSubcategory)v.Category;
+    }
+
+    public static explicit operator FurnitureSubcategory(Subcategory<FurnitureSubcategory, BuildingSubcategory> v) {
+        return (FurnitureSubcategory)v.Category;
+    }
 
     public override string ToString() {
         return _activeCategory switch {
