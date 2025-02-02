@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,6 +23,9 @@ public class TabController: MonoBehaviour {
 
     public EditorObjectCategory SelectedTabCategory { get; private set; } = 0;
     public Subcategory<FurnitureSubcategory, BuildingSubcategory> SelectedSubcategory { get; private set; } = (FurnitureSubcategory)0;
+
+    private List<EditorObjectScriptable> inCategoryObjects;
+    public EditorObjectScriptable SelectedObject;
 
     private void OnEnable() {
         root = GetComponent<UIDocument>().rootVisualElement;
@@ -86,7 +90,24 @@ public class TabController: MonoBehaviour {
             .Descendents<TemplateContainer>("Tile")
             .Build();
 
+        #region Item-tile group
+        RadioButtonGroup tileGroup = root.Q<RadioButtonGroup>("item-picker");
+
+        RegisterRadioButtonListeners(tileGroup);
+
+        // React to selected object (placing mode)
+        tileGroup.RegisterValueChangedCallback(OnTileSelected);
+        #endregion
+
         ChangeCategory();
+    }
+
+    void OnTileSelected(ChangeEvent<int> evt) {
+        SelectedObject = inCategoryObjects[evt.newValue];
+        Debug.Log(SelectedObject.name);
+
+        LevelEditorManager.Instance.ChangeState(EditorState.PlacingObjects);
+        EditorObjectManager.Instance.SelectObject(SelectedObject.Model);
     }
 
     /// <summary>
@@ -99,10 +120,10 @@ public class TabController: MonoBehaviour {
         foreach (var item in radioButtonList.Select((value, i) => new { i, value })) {
             radioButtonList[item.i].RegisterCallback<ChangeEvent<bool>>((evt) => {
                 if (evt.newValue) {
-                    (evt.target as RadioButton).AddToClassList("RadioButton--selected");
+                    (evt.target as RadioButton).parent.AddToClassList("RadioButton--selected");
                     radioButtonGroup.value = item.i;
                 } else {
-                    (evt.target as RadioButton).RemoveFromClassList("RadioButton--selected");
+                    (evt.target as RadioButton).parent.RemoveFromClassList("RadioButton--selected");
                 }
             });
         }
@@ -115,13 +136,7 @@ public class TabController: MonoBehaviour {
         OnCategoryChanged?.Invoke(new Category(SelectedTabCategory, SelectedSubcategory));
 
         var editorObjects = await AsyncResourceLoader.Instance.GetLoadedObjects();
-        FillObjectPanelWithContent(editorObjects);
-    }
-
-    private void FillObjectPanelWithContent(EditorObjectScriptable[] editorObjects)
-    {
-        //var inCategoryObjects = editorObjects;
-        var inCategoryObjects = editorObjects
+        inCategoryObjects = editorObjects
             .Where(obj =>
                 (SelectedTabCategory == EditorObjectCategory.Furniture &&
                  obj.EditorObjectType == EditorObjectCategory.Furniture &&
@@ -129,14 +144,17 @@ public class TabController: MonoBehaviour {
                 (SelectedTabCategory == EditorObjectCategory.Building &&
                  obj.EditorObjectType == EditorObjectCategory.Building &&
                  obj.buildingSubcategory == (BuildingSubcategory)SelectedSubcategory.Category))
-            .ToArray();
+            .ToList();
+        FillObjectPanelWithContent();
+    }
 
-
+    private void FillObjectPanelWithContent()
+    {
         // Populate tiles with new content
-        for (int i = 0; i < Math.Max(inCategoryObjects.Length, TileQuery.Count()); i++)
+        for (int i = 0; i < Math.Max(inCategoryObjects.Count, TileQuery.Count()); i++)
         {
             // All objects are rendered, hide the rest
-            if (i >= inCategoryObjects.Length)
+            if (i >= inCategoryObjects.Count)
             {
                 var _tile = TileQuery.AtIndex(i);
                 _tile.visible = false;
@@ -147,13 +165,15 @@ public class TabController: MonoBehaviour {
             if (i < TileQuery.Count())
             {
                 var _tile = TileQuery.AtIndex(i);
-                _tile.style.backgroundImage = inCategoryObjects[i].UITexture;
+                _tile.Q<VisualElement>("tile").style.backgroundImage = inCategoryObjects[i].UITexture;
+                _tile.style.height = _tile.style.width;
                 _tile.visible = true;
             }
             else
             { // Not enough tiles in a pool
                 var newTile = tileTemplateAsset.CloneTree();
-                newTile.style.backgroundImage = inCategoryObjects[i].UITexture;
+                newTile.Q<VisualElement>("tile").style.backgroundImage = inCategoryObjects[i].UITexture;
+                newTile.style.height = newTile.style.width;
                 TileQuery.AtIndex(0).parent.Add(newTile); // Assumes at least 1 Tile is present
             }
 

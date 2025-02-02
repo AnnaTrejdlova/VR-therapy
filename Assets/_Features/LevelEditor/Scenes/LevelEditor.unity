@@ -1348,8 +1348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df7b64b83978d34bb8f76d9ca37d9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TileTemplate: {fileID: 9197481963319205126, guid: dd26df286b39b034abf3c9637983edba,
-    type: 3}
+  tileTemplateAsset: {fileID: 0}
+  SelectedObject: {fileID: 0}
 --- !u!114 &1638651229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1915,7 +1915,7 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: c03ae710d777f3940966a5a026047cb6, type: 3}
   RemovingPreviewMaterial: {fileID: 2100000, guid: 9b61cda8266063149a8a63091c979d1b,
     type: 2}
-  PreviewMaterial: {fileID: 0}
+  PreviewMaterial: {fileID: 2100000, guid: 747f39d523af18846801e08f3d2a4fbc, type: 2}
 --- !u!4 &1871136822
 Transform:
   m_ObjectHideFlags: 0

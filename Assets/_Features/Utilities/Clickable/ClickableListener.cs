@@ -23,7 +23,9 @@ public class ClickableListener : MonoBehaviour {
 
     void HandleHover() {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo)) {
+        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+
+        if (!isOverUI && Physics.Raycast(ray, out RaycastHit hitInfo)) {
             IClickable clickedObject = hitInfo.collider.GetComponent<IClickable>();
             if (clickedObject != currentHoveredObject) {
                 if (currentHoveredObject != null) {

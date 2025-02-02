@@ -120,7 +120,7 @@ RadioButton > Label {
 }
 
 .RadioButton--selected {
-    background-color: rgb(164, 164, 164);
+    background-color: rgb(212, 155, 155);
     color: rgb(255, 255, 255);
     -unity-text-align: upper-center;
 }

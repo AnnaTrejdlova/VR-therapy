@@ -11,36 +11,31 @@
                     <ui:Button name="building-tab" tooltip="Building" class="tab-button" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;); -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(255, 255, 255); display: none;" />
                     <ui:RadioButtonGroup value="0" name="tab-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
                         <ui:GroupBox style="flex-direction: row; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                            <ui:VisualElement class="tab-category-button" style="height: 100%;">
+                            <ui:VisualElement class="tab-category-button RadioButton--selected" style="height: 100%; border-right-width: 1px;">
                                 <ui:RadioButton value="true" class="tab-category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/sofa-single.png?fileID=2800000&amp;guid=6019ce1995b1f1242ae0ecc38d9efe45&amp;type=3#sofa-single&quot;);" />
                             </ui:VisualElement>
-                            <ui:VisualElement class="tab-category-button" style="height: 100%;">
+                            <ui:VisualElement class="tab-category-button" style="height: 100%; border-left-width: 1px;">
                                 <ui:RadioButton class="tab-category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;);" />
                             </ui:VisualElement>
                         </ui:GroupBox>
                     </ui:RadioButtonGroup>
                 </ui:VisualElement>
-                <ui:VisualElement name="content-panel" class="furniture-panel" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; height: 100%;">
+                <ui:VisualElement name="content-panel" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; height: 100%;">
                     <ui:Label text="Content of Tab 1" />
                     <ui:ScrollView name="item-list" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="flex-wrap: nowrap;">
-                        <ui:VisualElement name="content" class="list-content">
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;); -unity-background-scale-mode: scale-to-fit;" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                            <ui:Instance template="Tile" name="Tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;);" />
-                        </ui:VisualElement>
+                        <ui:RadioButtonGroup value="-1" name="item-picker" style="width: 100%; margin-top: 0; margin-right: 24px; margin-bottom: 0; margin-left: 0;">
+                            <ui:GroupBox name="content" class="list-content" style="width: 100%; margin-top: 0; margin-right: 0; padding-top: 0; padding-right: 0; margin-bottom: 0; margin-left: 0; padding-bottom: 0; padding-left: 0;">
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                            </ui:GroupBox>
+                        </ui:RadioButtonGroup>
                     </ui:ScrollView>
                 </ui:VisualElement>
-                <ui:VisualElement name="category-picker" style="position: absolute; height: 40%; width: 50px; top: 13%; right: 100%;">
+                <ui:VisualElement name="category-picker" style="position: absolute; height: auto; width: 50px; top: 13%; right: 100%;">
                     <ui:RadioButtonGroup value="0" name="furniture-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
                         <ui:GroupBox style="flex-direction: column; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                            <ui:VisualElement class="category-button">
+                            <ui:VisualElement class="category-button RadioButton--selected">
                                 <ui:RadioButton value="true" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/sofa.png?fileID=2800000&amp;guid=d28396ba5ba8a28459084f5ec6a5ca58&amp;type=3#sofa&quot;);" />
                             </ui:VisualElement>
                             <ui:VisualElement class="category-button">
@@ -53,7 +48,7 @@
                     </ui:RadioButtonGroup>
                     <ui:RadioButtonGroup value="0" name="building-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: none;">
                         <ui:GroupBox style="flex-direction: column; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                            <ui:VisualElement class="category-button">
+                            <ui:VisualElement class="category-button RadioButton--selected">
                                 <ui:RadioButton value="true" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;);" />
                             </ui:VisualElement>
                             <ui:VisualElement class="category-button">
