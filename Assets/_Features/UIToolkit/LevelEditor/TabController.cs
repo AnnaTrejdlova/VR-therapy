@@ -81,6 +81,7 @@ public class TabController: MonoBehaviour {
 
         #endregion
 
+        #region Item-tile group
         contentPanel = root.Q<VisualElement>("content-panel");
 
         TileQuery = new UQueryBuilder<VisualElement>(root)
@@ -90,7 +91,6 @@ public class TabController: MonoBehaviour {
             .Descendents<TemplateContainer>("Tile")
             .Build();
 
-        #region Item-tile group
         RadioButtonGroup tileGroup = root.Q<RadioButtonGroup>("item-picker");
 
         RegisterRadioButtonListeners(tileGroup);
@@ -99,7 +99,33 @@ public class TabController: MonoBehaviour {
         tileGroup.RegisterValueChangedCallback(OnTileSelected);
         #endregion
 
+        #region Toolbox group
+        Button deleteModeButton = root.Q<Button>("delete-mode-btn");
+        Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
+        Button clearToolButton = root.Q<Button>("clear-tool-btn");
+
+        deleteModeButton.clicked += OnDeleteModeClick;
+        wallDeleteModeButton.clicked += OnWallDeleteModeClick;
+        clearToolButton.clicked += OnClearModeClick;
+        #endregion
+
         ChangeCategory();
+    }
+    public void OnDeleteModeClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.RemovingObjects);
+    }
+
+    public void OnWallModeClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.PlacingWalls);
+    }
+
+    public void OnWallDeleteModeClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.RemovingWalls);
+    }
+
+    public void OnClearModeClick() {
+        LevelEditorManager.Instance.ChangeState(EditorState.None);
+        EditorObjectManager.Instance.SelectObject(SelectedObject.Model);
     }
 
     void OnTileSelected(ChangeEvent<int> evt) {

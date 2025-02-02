@@ -801,6 +801,8 @@ MonoBehaviour:
     strategy: {fileID: 1701126713}
   - state: 3
     strategy: {fileID: 465393762}
+  - state: 5
+    strategy: {fileID: 0}
 --- !u!4 &398076893
 Transform:
   m_ObjectHideFlags: 0

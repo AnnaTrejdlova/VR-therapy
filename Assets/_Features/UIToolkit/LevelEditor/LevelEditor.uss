@@ -60,7 +60,7 @@
     height: 100%;
 }
 
-.category-button {
+.category-button-view {
     flex-grow: 1;
     height: 60px;
     width: 100%;
@@ -161,4 +161,24 @@
     width: 48%;
     margin-right: 4px;
     margin-bottom: 8px;
+}
+
+Button.icon {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(255, 255, 255, 0);
+    height: 100%;
+    cursor: resource('Cursors/hand_64');
+}
+
+Button.icon:hover {
+    cursor: resource('Cursors/hand_64');
+    background-color: rgb(219, 219, 219);
+}
+
+Button.active {
+    background-color: rgb(212, 155, 155);
 }

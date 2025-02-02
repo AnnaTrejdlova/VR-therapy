@@ -77,26 +77,26 @@ public class TileManager : Singleton<TileManager> {
     # region Tile interaction strategy
 
     public void TileClickHandle(Tile tile) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileClick(tile);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileClick(tile);
     }
 
     public void TileHoverEnterHandle(Tile tile) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileHover(tile);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileHover(tile);
     }
 
     public void TileHoverExitHandle(Tile tile) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileUnhover(tile);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileUnhover(tile);
     }
     public void TileClickHandle(Tile tile, TileWallPosition position) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileClick(tile, position);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileClick(tile, position);
     }
 
     public void TileHoverEnterHandle(Tile tile, TileWallPosition position) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileHover(tile, position);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileHover(tile, position);
     }
 
     public void TileHoverExitHandle(Tile tile, TileWallPosition position) {
-        FindStrategy(LevelEditorManager.Instance.GetState()).OnTileUnhover(tile, position);
+        FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileUnhover(tile, position);
     }
 
     #endregion
@@ -126,6 +126,8 @@ public class TileManager : Singleton<TileManager> {
     # region Support functions
 
     TileInteractionStrategy FindStrategy(EditorState state) {
+        if (state == EditorState.None) return null;
+
         foreach (var strat in tileInteractionStrategyEntries) {
             if (strat.state == state) {
                 return strat.GetStrategy();
