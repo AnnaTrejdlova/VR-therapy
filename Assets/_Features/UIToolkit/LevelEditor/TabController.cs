@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +25,7 @@ public class TabController: MonoBehaviour {
     public EditorObjectCategory SelectedTabCategory { get; private set; } = 0;
     public Subcategory<FurnitureSubcategory, BuildingSubcategory> SelectedSubcategory { get; private set; } = (FurnitureSubcategory)0;
 
-    private List<EditorObjectScriptable> inCategoryObjects;
+    private List<EditorObjectScriptable> inCategoryObjects = new();
     public EditorObjectScriptable SelectedObject;
 
     private void OnEnable() {
@@ -41,11 +42,13 @@ public class TabController: MonoBehaviour {
         // Update the subcategory when the value changes
         furnitureGroup.RegisterValueChangedCallback((evt) => {
             SelectedSubcategory = (FurnitureSubcategory)evt.newValue;
+            LevelEditorManager.Instance.ChangeState(EditorState.None);
             ChangeCategory();
         });
         // Update the subcategory when the value changes
         buildingGroup.RegisterValueChangedCallback((evt) => {
             SelectedSubcategory = (BuildingSubcategory)evt.newValue;
+            LevelEditorManager.Instance.ChangeState(EditorState.None);
             ChangeCategory();
         });
 
@@ -60,15 +63,16 @@ public class TabController: MonoBehaviour {
         // Update the tab category when the value changes
         tabGroup.RegisterValueChangedCallback((evt) => {
             SelectedTabCategory = (EditorObjectCategory)evt.newValue;
+            LevelEditorManager.Instance.ChangeState(EditorState.None);
 
             switch (SelectedTabCategory) {
                 case EditorObjectCategory.Furniture:
-                    SelectedSubcategory = (FurnitureSubcategory)0;
+                    SelectedSubcategory = (FurnitureSubcategory)furnitureGroup.value;
                     furnitureGroup.style.display = DisplayStyle.Flex;
                     buildingGroup.style.display = DisplayStyle.None;
                     break;
                 case EditorObjectCategory.Building:
-                    SelectedSubcategory = (BuildingSubcategory)0;
+                    SelectedSubcategory = (BuildingSubcategory)buildingGroup.value;
                     furnitureGroup.style.display = DisplayStyle.None;
                     buildingGroup.style.display = DisplayStyle.Flex;
                     break;
@@ -112,23 +116,29 @@ public class TabController: MonoBehaviour {
         ChangeCategory();
     }
     public void OnDeleteModeClick() {
+        ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.RemovingObjects);
     }
 
     public void OnWallModeClick() {
+        ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.PlacingWalls);
     }
 
     public void OnWallDeleteModeClick() {
+        ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.RemovingWalls);
     }
 
     public void OnClearModeClick() {
+        ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.None);
-        EditorObjectManager.Instance.SelectObject(SelectedObject.Model);
+        EditorObjectManager.Instance.SelectObject(null); // clear model
     }
 
     void OnTileSelected(ChangeEvent<int> evt) {
+        if (evt.newValue == -1) return;
+
         SelectedObject = inCategoryObjects[evt.newValue];
         Debug.Log(SelectedObject.name);
 
@@ -163,6 +173,8 @@ public class TabController: MonoBehaviour {
     }
 
     private async void ChangeCategory() {
+        ResetSelectedObjectUI();
+
         contentPanel.Q<Label>().text = SelectedTabCategory.ToString() + " -> " + SelectedSubcategory.ToString();
 
         // Fire the event, notifying listeners of the change
@@ -181,6 +193,23 @@ public class TabController: MonoBehaviour {
         FillObjectPanelWithContent();
     }
 
+    /// <summary>
+    ///     Reset all active button and variables associated with it
+    /// </summary>
+    private void ResetSelectedObjectUI() {
+        // Reset tile RadioButtons
+        for (int i = 0; i < Math.Max(inCategoryObjects.Count, TileQuery.Count()); i++) {
+            var _tile = TileQuery.AtIndex(i);
+            _tile.Q<VisualElement>("tile").RemoveFromClassList("RadioButton--selected");
+            _tile.Q<VisualElement>("tile").Q<RadioButton>().value = false;
+        }
+
+        // Reset tile RadioButtonGroup
+        RadioButtonGroup tileGroup = root.Q<RadioButtonGroup>("item-picker");
+        tileGroup.value = -1;
+        SelectedObject = null;
+    }
+
     private void FillObjectPanelWithContent()
     {
         // Populate tiles with new content
@@ -194,11 +223,13 @@ public class TabController: MonoBehaviour {
                 continue;
             }
 
-            // Set the model UI texture to the tile background image
+            // Reuse a tile to set the model UI texture
             if (i < TileQuery.Count())
             {
                 var _tile = TileQuery.AtIndex(i);
+                _tile.Q<VisualElement>("tile").RemoveFromClassList("RadioButton--selected");
                 _tile.Q<VisualElement>("tile").style.backgroundImage = inCategoryObjects[i].UITexture;
+                _tile.Q<VisualElement>("tile").Q<RadioButton>().value = false;
                 _tile.style.height = _tile.style.width;
                 _tile.visible = true;
             }
