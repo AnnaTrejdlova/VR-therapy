@@ -1,0 +1,139 @@
+.dark-button {
+    background-color: rgb(46, 46, 46);
+    color: rgb(255, 255, 255);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 9px;
+    padding-right: 9px;
+    width: 100px;
+    height: 25px;
+    margin-top: 6px;
+}
+
+.dark-button:hover {
+    background-color: rgb(89, 89, 89);
+    cursor: resource('Cursors/hand_64');
+}
+
+.blue-button {
+    background-color: rgb(21, 99, 251);
+    color: rgb(255, 255, 255);
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-left-color: rgb(21, 99, 251);
+    border-right-color: rgb(21, 99, 251);
+    border-top-color: rgb(21, 99, 251);
+    border-bottom-color: rgb(21, 99, 251);
+}
+
+.blue-button:hover {
+    background-color: rgb(74, 101, 255);
+    border-left-color: rgb(74, 101, 255);
+    border-right-color: rgb(74, 101, 255);
+    border-top-color: rgb(74, 101, 255);
+    border-bottom-color: rgb(74, 101, 255);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    cursor: resource('Cursors/hand_64');
+}
+
+.blue-outline-button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(21, 99, 251);
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-left-color: rgb(21, 99, 251);
+    border-right-color: rgb(21, 99, 251);
+    border-top-color: rgb(21, 99, 251);
+    border-bottom-color: rgb(21, 99, 251);
+}
+
+.blue-outline-button:hover {
+    background-color: rgb(219, 219, 219);
+    color: rgb(74, 101, 255);
+    border-left-color: rgb(74, 101, 255);
+    border-right-color: rgb(74, 101, 255);
+    border-top-color: rgb(74, 101, 255);
+    border-bottom-color: rgb(74, 101, 255);
+    cursor: resource('Cursors/hand_64');
+}
+
+RadioButton {
+    background-color: rgb(255, 255, 255);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+RadioButton:hover {
+    background-color: rgb(219, 219, 219);
+    cursor: resource('Cursors/hand_64');
+}
+
+RadioButton > VisualElement {
+    display: none;
+}
+
+RadioButton > Label {
+    color: rgb(0, 0, 0);
+    -unity-text-align: middle-center;
+    cursor: resource('Cursors/hand_64');
+}
+
+.RadioButton--selected {
+    background-color: rgb(212, 155, 155);
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+}
+
+.RadioButton--selected > Label {
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.RadioButton--selected:hover {
+    background-color: rgb(46, 46, 46);
+}
+
+.unity-scroll-view__content-container {
+    flex-direction: row;
+}
