@@ -683,12 +683,12 @@ GameObject:
   - component: {fileID: 275875990}
   - component: {fileID: 275875992}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: EventSystem (use from Utilities)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &275875990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1350,8 +1350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df7b64b83978d34bb8f76d9ca37d9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileTemplateAsset: {fileID: 0}
-  SelectedObject: {fileID: 0}
+  tileTemplateAsset: {fileID: 9197481963319205126, guid: dd26df286b39b034abf3c9637983edba,
+    type: 3}
 --- !u!114 &1638651229
 MonoBehaviour:
   m_ObjectHideFlags: 0

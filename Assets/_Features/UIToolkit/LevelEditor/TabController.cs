@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using TreeEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,7 +24,7 @@ public class TabController: MonoBehaviour {
     public Subcategory<FurnitureSubcategory, BuildingSubcategory> SelectedSubcategory { get; private set; } = (FurnitureSubcategory)0;
 
     private List<EditorObjectScriptable> inCategoryObjects = new();
-    public EditorObjectScriptable SelectedObject;
+    public EditorObjectScriptable SelectedObject { get; private set; }
 
     private void OnEnable() {
         root = GetComponent<UIDocument>().rootVisualElement;
