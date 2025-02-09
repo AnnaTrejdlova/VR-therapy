@@ -6,6 +6,7 @@ public class TileManager : Singleton<TileManager> {
 
     public GameObject TilePrefab;
     public List<TileInteractionStrategyEntry> tileInteractionStrategyEntries = new List<TileInteractionStrategyEntry>();
+    public int GridSize = 10; // tileCount x tileCount gridsize
     private float _gridYpos = 0f;
     private float _tileSize = 1f;
     private List<Tile> _tiles = new List<Tile>();
@@ -16,7 +17,7 @@ public class TileManager : Singleton<TileManager> {
     protected override void Awake() {
         base.Awake();
 
-        SetUpGrid(10, 10);
+        SetUpGrid(GridSize, GridSize);
     }
 
     public List<Tile> GetTilesInLine(Vector2Int start, Vector2Int end) {
