@@ -105,14 +105,21 @@ public class TabController: MonoBehaviour {
         Button deleteModeButton = root.Q<Button>("delete-mode-btn");
         Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
         Button clearToolButton = root.Q<Button>("clear-tool-btn");
+        Button fpsButton = root.Q<Button>("fps-btn");
 
         deleteModeButton.clicked += OnDeleteModeClick;
         wallDeleteModeButton.clicked += OnWallDeleteModeClick;
         clearToolButton.clicked += OnClearModeClick;
+        fpsButton.clicked += OnFpsClick;
         #endregion
 
         ChangeCategory();
     }
+
+    public void OnFpsClick() {
+        print("He said 'FPS CLICKED!' and then he fpissed all over them");
+    }
+
     public void OnDeleteModeClick() {
         ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.RemovingObjects);
