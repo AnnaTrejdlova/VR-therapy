@@ -78,6 +78,7 @@ public class TileManager : Singleton<TileManager> {
     # region Tile interaction strategy
 
     public void TileClickHandle(Tile tile) {
+        print($"the state is {LevelEditorManager.Instance.GetState()} and the chosen strategy is {FindStrategy(LevelEditorManager.Instance.GetState())}");
         FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileClick(tile);
     }
 

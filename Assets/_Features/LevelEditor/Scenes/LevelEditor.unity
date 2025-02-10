@@ -793,13 +793,13 @@ MonoBehaviour:
   TilePrefab: {fileID: 1391382821597692706, guid: 8c4f537df4df9f84889e444fffbcbe5f,
     type: 3}
   tileInteractionStrategyEntries:
-  - state: 0
-    strategy: {fileID: 100208748}
   - state: 1
-    strategy: {fileID: 69953330}
+    strategy: {fileID: 100208748}
   - state: 2
-    strategy: {fileID: 1701126713}
+    strategy: {fileID: 69953330}
   - state: 3
+    strategy: {fileID: 1701126713}
+  - state: 4
     strategy: {fileID: 465393762}
   - state: 5
     strategy: {fileID: 0}
