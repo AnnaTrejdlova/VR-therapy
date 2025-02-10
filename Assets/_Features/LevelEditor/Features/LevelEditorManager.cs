@@ -8,7 +8,8 @@ public class LevelEditorManager : Singleton<LevelEditorManager> {
     [System.Serializable]
     public class EditorStateChangedEvent : UnityEvent<EditorState> { }
 
-    private EditorState currentState;
+    EditorState _currentState;
+    EditorState _previousState;
 
     // UnityEvent to broadcast the state change
     public EditorStateChangedEvent OnStateChanged = new EditorStateChangedEvent();
@@ -20,22 +21,34 @@ public class LevelEditorManager : Singleton<LevelEditorManager> {
     }
 
     public void ChangeState(EditorState state) {
-        if (currentState != state) {
-            currentState = state;
-            OnStateChanged.Invoke(currentState); // Trigger the event
+        if (_currentState != state) {
+            _previousState = _currentState;
+            _currentState = state;
+            OnStateChanged.Invoke(_currentState); // Trigger the event
         }
     }
 
+    public void ChangeStatePrevious() {
+        if (_previousState == null) return;
+
+        ChangeState(_previousState);
+    }
+
     public EditorState GetState() {
-        return currentState;
+        return _currentState;
+    }
+
+    public EditorState GetPreviousState() {
+        return _previousState;
     }
 }
 
 public enum EditorState {
+    None,
     PlacingObjects,
     RemovingObjects,
     PlacingWalls,
     RemovingWalls,
     PlacingFloors,
-    None,
+    PreviewWalking
 }

@@ -117,7 +117,11 @@ public class TabController: MonoBehaviour {
     }
 
     public void OnFpsClick() {
-        print("He said 'FPS CLICKED!' and then he fpissed all over them");
+        if (LevelEditorManager.Instance.GetState() == EditorState.PreviewWalking) {
+            LevelEditorManager.Instance.ChangeStatePrevious();
+        } else {
+            LevelEditorManager.Instance.ChangeState(EditorState.PreviewWalking);
+        }
     }
 
     public void OnDeleteModeClick() {

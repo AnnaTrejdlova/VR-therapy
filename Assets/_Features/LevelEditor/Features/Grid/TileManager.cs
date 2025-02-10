@@ -128,12 +128,12 @@ public class TileManager : Singleton<TileManager> {
 
     TileInteractionStrategy FindStrategy(EditorState state) {
         if (state == EditorState.None) return null;
-
         foreach (var strat in tileInteractionStrategyEntries) {
             if (strat.state == state) {
                 return strat.GetStrategy();
             }
         }
+         
         print("no strategy found for this editor state!");
         return null;
     }

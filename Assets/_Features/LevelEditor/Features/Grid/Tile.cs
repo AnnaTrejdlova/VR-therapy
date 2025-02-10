@@ -214,6 +214,7 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     public void OnHoverEnter() {
+        print($"Hovering over {gridPosition}");
         TileManager.Instance.TileHoverEnterHandle(this);
     }
 
