@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class AsyncResourceLoader : Singleton<AsyncResourceLoader>
-{
+public class AsyncResourceLoader: Singleton<AsyncResourceLoader> {
     public LoadingState State { get; private set; } = LoadingState.NotStarted;
 
     private EditorObjectScriptable[] _loadedEditorObjects;
 
-    protected override void Awake()
-    {
+    protected override void Awake() {
         base.Awake();
     }
 
@@ -30,16 +28,14 @@ public class AsyncResourceLoader : Singleton<AsyncResourceLoader>
         return resourceRequest.asset as T;
     }
 
-    public async Task<EditorObjectScriptable[]> LoadEditorObjectsAsync()
-    {
+    public async Task<EditorObjectScriptable[]> LoadEditorObjectsAsync() {
         State = LoadingState.Loading;
         List<Task<EditorObjectScriptable>> loadTasks = new List<Task<EditorObjectScriptable>>();
 
         // Load all resource names
         Object[] resourceObjects = Resources.LoadAll("EditorObjects", typeof(EditorObjectScriptable));
 
-        foreach (Object obj in resourceObjects)
-        {
+        foreach (Object obj in resourceObjects) {
             string path = $"EditorObjects/{obj.name}";
             loadTasks.Add(LoadResourceAsync<EditorObjectScriptable>(path));
         }
@@ -49,16 +45,11 @@ public class AsyncResourceLoader : Singleton<AsyncResourceLoader>
         return _loadedEditorObjects;
     }
 
-    public async Task<EditorObjectScriptable[]> GetLoadedObjects()
-    {
-        if (State == LoadingState.NotStarted)
-        {
+    public async Task<EditorObjectScriptable[]> GetLoadedObjects() {
+        if (State == LoadingState.NotStarted) {
             return await LoadEditorObjectsAsync();
-        }
-        else if (State == LoadingState.Loading)
-        {
-            while (State == LoadingState.Loading)
-            {
+        } else if (State == LoadingState.Loading) {
+            while (State == LoadingState.Loading) {
                 await Task.Yield(); // Wait for the loading to complete
             }
         }
@@ -67,8 +58,7 @@ public class AsyncResourceLoader : Singleton<AsyncResourceLoader>
         return _loadedEditorObjects ?? new EditorObjectScriptable[0];
     }
 
-    public enum LoadingState
-    {
+    public enum LoadingState {
         NotStarted,
         Loading,
         Completed

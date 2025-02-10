@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 // Code from: https://discussions.unity.com/t/creating-tooltips/894849/6
 
-public class TooltipHandler: Singleton<MonoBehaviour> {
+public class TooltipHandler: Singleton<TooltipHandler> {
     //Create and hide a label in the UI Builder and name it "tooltipLabel". 
     //Set its position as 'Absolute'.
     //Set Shrink to 1, Grow to 1, Direction to 'Row', Wrap to 'Wrap', max width 
