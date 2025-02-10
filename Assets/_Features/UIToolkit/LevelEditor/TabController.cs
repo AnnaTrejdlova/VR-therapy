@@ -52,6 +52,19 @@ public class TabController: MonoBehaviour {
 
         #endregion
 
+        #region Toolbox group
+        Button deleteModeButton = root.Q<Button>("delete-mode-btn");
+        Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
+        Button clearToolButton = root.Q<Button>("clear-tool-btn");
+
+        deleteModeButton.clicked += OnDeleteModeClick;
+        wallDeleteModeButton.clicked += OnWallDeleteModeClick;
+        clearToolButton.clicked += OnClearModeClick;
+
+        furnitureGroup.style.display = DisplayStyle.Flex;
+        buildingGroup.style.display = DisplayStyle.None;
+        #endregion
+
         #region Tabs group
 
         RadioButtonGroup tabGroup = root.Q<RadioButtonGroup>("tab-picker");
@@ -68,11 +81,17 @@ public class TabController: MonoBehaviour {
                     SelectedSubcategory = (FurnitureSubcategory)furnitureGroup.value;
                     furnitureGroup.style.display = DisplayStyle.Flex;
                     buildingGroup.style.display = DisplayStyle.None;
+
+                    wallDeleteModeButton.parent.style.display = DisplayStyle.None;
+                    deleteModeButton.parent.style.display = DisplayStyle.Flex;
                     break;
                 case EditorObjectCategory.Building:
                     SelectedSubcategory = (BuildingSubcategory)buildingGroup.value;
                     furnitureGroup.style.display = DisplayStyle.None;
                     buildingGroup.style.display = DisplayStyle.Flex;
+
+                    wallDeleteModeButton.parent.style.display = DisplayStyle.Flex;
+                    deleteModeButton.parent.style.display = DisplayStyle.None;
                     break;
                 default:
                     break;
@@ -101,14 +120,31 @@ public class TabController: MonoBehaviour {
         tileGroup.RegisterValueChangedCallback(OnTileSelected);
         #endregion
 
-        #region Toolbox group
-        Button deleteModeButton = root.Q<Button>("delete-mode-btn");
-        Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
-        Button clearToolButton = root.Q<Button>("clear-tool-btn");
+        #region Setup Tooltips
+        var buttonsWithTooltip = (IEnumerable<VisualElement>)root.Query<Button>().Build()
+            .Where(btn => !string.IsNullOrEmpty(btn.tooltip));
+        var radioButtonsWithTooltip = (IEnumerable<VisualElement>) root.Query<RadioButton>().Build()
+            .Where(btn => !string.IsNullOrEmpty(btn.tooltip));
 
-        deleteModeButton.clicked += OnDeleteModeClick;
-        wallDeleteModeButton.clicked += OnWallDeleteModeClick;
-        clearToolButton.clicked += OnClearModeClick;
+        IEnumerable<VisualElement> combinedQuery = buttonsWithTooltip.Concat(radioButtonsWithTooltip);
+
+        var tooltipHandler = GetComponent<TooltipHandler>();
+
+        foreach (var element in combinedQuery) {
+            element.RegisterCallback<MouseOverEvent>(evt => MyButtonMouseOver(element));
+            element.RegisterCallback<MouseOutEvent>(evt => MyButtonMouseOut());
+        }
+
+        void MyButtonMouseOver(VisualElement element) {
+            // For dynamic tooltips
+            StringObject tooltipString = new StringObject(element.tooltip);
+            //tooltipString.text = "Some String or other variable that you want to display in a tooltip.";
+            tooltipHandler.OnElementMouseOver(tooltipString);
+        }
+
+        void MyButtonMouseOut() {
+            tooltipHandler.OnElementMouseLeave();
+        }
         #endregion
 
         ChangeCategory();
