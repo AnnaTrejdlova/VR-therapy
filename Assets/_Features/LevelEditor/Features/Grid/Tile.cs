@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IClickable {
@@ -24,7 +25,6 @@ public class Tile : MonoBehaviour, IClickable {
     private float tileSize = 1f;
     private Outline outline;
     private GameObject addedGameObject; // what you put into it
-    private GameObject addedGameObjectPreview; // what you put into it
     private Vector2Int gridPosition;
     public Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
@@ -51,14 +51,16 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     #region Wall management
-
     
     public void CreateWallsBasedOnPreview(Material wallMaterial) {
         if (PreviewWallsDictionary.Count == 0) return;
 
         foreach (var entry in PreviewWallsDictionary) {
-            if (!AddedWallsDictionary.TryGetValue(entry.Key, out _)) {
+            AddedWallsDictionary.TryGetValue(entry.Key, out var wall);
+            if (wall == null) {
                 AddedWallsDictionary.Add(entry.Key, entry.Value);
+            } else if (!wall.activeInHierarchy) {
+                wall.SetActive(true);
             }
         }
 
@@ -143,59 +145,26 @@ public class Tile : MonoBehaviour, IClickable {
 
     #endregion
 
-    #region Manipulating added objects
+    #region Adding/Removing objects
 
     public void AddObjectToTile(GameObject obj) {
         InstantiateAddedObject(obj);
     }
 
-    public void AddObjectPreviewToTile(GameObject obj) {
-        InstantiateAddedObjectPreview(obj);
-    }
-
     public void RemoveObjectFromTile() {
-        if (isTileOccupied()) {
-            Destroy(addedGameObject);
-            addedGameObject = null;
-        }
-    }
-
-    public void RemoveObjectPreviewFromTile() {
-        if (isTileOccupied()) {
-            Destroy(addedGameObjectPreview);
-            addedGameObjectPreview = null;
-        }
-    }
-
-    public void RotateOject(float angle = 45f) {
-        addedGameObject.transform.Rotate(new Vector3(0, angle, 0));
+        Destroy(addedGameObject);
+        addedGameObject = null;
     }
 
     void InstantiateAddedObject(GameObject obj) {
         if (addedGameObject != null) {
             Destroy(addedGameObject);
         }
-        if (addedGameObjectPreview != null) {
-            addedGameObjectPreview.GetComponent<EditorObject>().RestoreOriginalMaterials();
-            addedGameObject = addedGameObjectPreview;
-            addedGameObjectPreview = null;
-            return;
-        }
-
         // must not be a child of the tile because of the scale shenanigans
         // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
         addedGameObject = Instantiate(obj, transform.position, Quaternion.identity);
         addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
         addedGameObject.AddComponent<EditorObject>();
-    }
-
-    void InstantiateAddedObjectPreview(GameObject obj) {
-        // must not be a child of the tile because of the scale shenanigans
-        // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
-        addedGameObjectPreview = Instantiate(obj, transform.position, Quaternion.identity);
-        addedGameObjectPreview.transform.position += new Vector3(0, transform.localScale.y, 0);
-        addedGameObjectPreview.AddComponent<EditorObject>();
-        addedGameObjectPreview.GetComponent<EditorObject>().SetMaterial(EditorObjectManager.Instance.PreviewMaterial);
     }
 
     public void ChangeObjectMaterial(Material material) {
@@ -234,12 +203,13 @@ public class Tile : MonoBehaviour, IClickable {
         gridPosition = pos;
     }
 
+    /// <returns>[x,y] coordinates of position in placing grid</returns>
     public Vector2Int GetGridPosition() {
         return gridPosition;
     }
 
     public bool isTileOccupied() {
-        return addedGameObject != null || addedGameObjectPreview != null;
+        return addedGameObject != null;
     }
 
     #endregion
@@ -294,14 +264,16 @@ public class Tile : MonoBehaviour, IClickable {
 
     public bool ContainsPreview(TileWallPosition orientation)
     {
-        return PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
+        bool contains = PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
+        print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {contains}");
+        return contains;
     }
 
     public bool ContainsWall(TileWallPosition orientation)
     {
-   //     print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy}");
-    //    print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {ContainsPreview(orientation)}");
-        return (AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy) || ContainsPreview(orientation);
+        bool contains = AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy;
+        print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {contains}");
+        return contains;
     }
 
     public TileWallPosition GetLastOrientation()
