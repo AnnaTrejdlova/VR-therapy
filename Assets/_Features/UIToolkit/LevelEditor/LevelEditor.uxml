@@ -1,0 +1,75 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Tile" src="project://database/Assets/_Features/UIToolkit/LevelEditor/Tile.uxml?fileID=9197481963319205126&amp;guid=dd26df286b39b034abf3c9637983edba&amp;type=3#Tile" />
+    <Style src="project://database/Assets/_Features/UIToolkit/LevelEditor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=5ceee86ac9f0dba4195fd5d7ce56e7b1&amp;type=3#LevelEditor" />
+    <Style src="project://database/Assets/_Features/UIToolkit/Stylesheet.uss?fileID=7433441132597879392&amp;guid=50ee65a9eb7ad034c8cdbf7fa8239a15&amp;type=3#Stylesheet" />
+    <ui:VisualElement name="root" picking-mode="Ignore" style="flex-grow: 1; height: 100%; width: 100%; visibility: hidden;">
+        <ui:VisualElement name="nav" style="flex-grow: 1; background-color: rgb(26, 0, 255); height: auto; display: none;" />
+        <ui:VisualElement name="mid" picking-mode="Ignore" style="flex-grow: 1; flex-direction: row-reverse; height: 80%;">
+            <ui:VisualElement name="right-panel" style="flex-grow: 1; right: 0; position: absolute; width: 24%; top: 0; bottom: 0; background-color: rgb(255, 255, 255); visibility: visible;">
+                <ui:VisualElement name="tab-nav" style="flex-grow: 1; height: 15%; flex-direction: row; flex-shrink: 1; max-height: 15%;">
+                    <ui:Button name="furniture-tab" tooltip="Furniture" class="tab-button active" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/sofa-single.png?fileID=2800000&amp;guid=6019ce1995b1f1242ae0ecc38d9efe45&amp;type=3#sofa-single&quot;); border-right-color: rgb(0, 0, 0); border-right-width: 1px; -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(255, 255, 255); display: none;" />
+                    <ui:Button name="building-tab" tooltip="Building" class="tab-button" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;); -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(255, 255, 255); display: none;" />
+                    <ui:RadioButtonGroup value="0" name="tab-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+                        <ui:GroupBox style="flex-direction: row; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                            <ui:VisualElement class="tab-category-button RadioButton--selected" style="height: 100%; border-right-width: 1px;">
+                                <ui:RadioButton value="true" tooltip="Furniture" class="tab-category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/sofa-single.png?fileID=2800000&amp;guid=6019ce1995b1f1242ae0ecc38d9efe45&amp;type=3#sofa-single&quot;);" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="tab-category-button" style="height: 100%; border-left-width: 1px;">
+                                <ui:RadioButton tooltip="Construction" class="tab-category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;);" />
+                            </ui:VisualElement>
+                        </ui:GroupBox>
+                    </ui:RadioButtonGroup>
+                </ui:VisualElement>
+                <ui:VisualElement name="content-panel" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; height: 100%;">
+                    <ui:Label text="Content of Tab 1" />
+                    <ui:ScrollView name="item-list" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="flex-wrap: nowrap;">
+                        <ui:RadioButtonGroup value="-1" name="item-picker" style="width: 100%; margin-top: 0; margin-right: 24px; margin-bottom: 0; margin-left: 0;">
+                            <ui:GroupBox name="content" class="list-content" style="width: 100%; margin-top: 0; margin-right: 0; padding-top: 0; padding-right: 0; margin-bottom: 0; margin-left: 0; padding-bottom: 0; padding-left: 0;">
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                                <ui:Instance template="Tile" name="Tile" class="tile-outside" />
+                            </ui:GroupBox>
+                        </ui:RadioButtonGroup>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement name="category-picker" style="position: absolute; height: auto; width: 50px; top: 13%; right: 100%;">
+                    <ui:RadioButtonGroup value="0" name="furniture-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+                        <ui:GroupBox style="flex-direction: column; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                            <ui:VisualElement class="category-button-view RadioButton--selected">
+                                <ui:RadioButton value="true" tooltip="Living Room" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/sofa.png?fileID=2800000&amp;guid=d28396ba5ba8a28459084f5ec6a5ca58&amp;type=3#sofa&quot;);" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="category-button-view">
+                                <ui:RadioButton tooltip="Bathroom" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/shower.png?fileID=2800000&amp;guid=28ef7069cd2393b4591e6a7991a48870&amp;type=3#shower&quot;);" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="category-button-view">
+                                <ui:RadioButton tooltip="Kitchen" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/fridge.png?fileID=2800000&amp;guid=eb317fe54fc7a90429ee4955e9fa35be&amp;type=3#fridge&quot;);" />
+                            </ui:VisualElement>
+                        </ui:GroupBox>
+                    </ui:RadioButtonGroup>
+                    <ui:RadioButtonGroup value="0" name="building-picker" style="flex-direction: column; flex-grow: 1; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: none;">
+                        <ui:GroupBox style="flex-direction: column; flex-grow: 1; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                            <ui:VisualElement class="category-button-view RadioButton--selected">
+                                <ui:RadioButton value="true" class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/wall.png?fileID=2800000&amp;guid=10fbdc3443c48414c823c82fe1bbd3f7&amp;type=3#wall&quot;);" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="category-button-view">
+                                <ui:RadioButton class="category-radio" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/door-open.png?fileID=2800000&amp;guid=0f16273c3528ad54b9940f33d70c9fcd&amp;type=3#door-open&quot;);" />
+                            </ui:VisualElement>
+                        </ui:GroupBox>
+                    </ui:RadioButtonGroup>
+                </ui:VisualElement>
+                <ui:VisualElement name="toolbox" style="position: absolute; height: auto; width: 50px; top: auto; right: 100%; bottom: 20px;">
+                    <ui:VisualElement class="category-button-view">
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Delete object" name="delete-mode-btn" class="category-radio icon" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/trash-can.png?fileID=2800000&amp;guid=42033a1f5fc82ef419fc5ec26d257e00&amp;type=3#trash-can&quot;);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="category-button-view">
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Remove Walls" name="wall-delete-mode-btn" class="category-radio icon" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/eraser.png?fileID=2800000&amp;guid=a91a5ece7dba41a4b84b373061d1896e&amp;type=3#eraser&quot;); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="category-button-view">
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Clear all tools" name="clear-tool-btn" class="category-radio icon" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/brush-off.png?fileID=2800000&amp;guid=17cc21c013337d74eb816ed9f22397e2&amp;type=3#brush-off&quot;);" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label tabindex="-1" text="The big brown fox jumped over the lazy dog" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tooltipLabel" picking-mode="Ignore" class="tooltipLabel" style="visibility: hidden;" />
+</ui:UXML>

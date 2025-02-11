@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Features/UIToolkit/LevelEditor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=5ceee86ac9f0dba4195fd5d7ce56e7b1&amp;type=3#LevelEditor" />
+    <Style src="project://database/Assets/_Features/UIToolkit/Stylesheet.uss?fileID=7433441132597879392&amp;guid=50ee65a9eb7ad034c8cdbf7fa8239a15&amp;type=3#Stylesheet" />
+    <ui:VisualElement name="tile" class="tile" style="background-image: resource(&apos;Images/Fruits And Vegetables/Broskev&apos;); -unity-background-scale-mode: scale-to-fit; width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 200px;">
+        <ui:RadioButton class="radio-button--no-checkmark" style="opacity: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

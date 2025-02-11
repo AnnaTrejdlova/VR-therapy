@@ -36,5 +36,6 @@ public enum EditorState {
     RemovingObjects,
     PlacingWalls,
     RemovingWalls,
-    PlacingFloors
+    PlacingFloors,
+    None,
 }
