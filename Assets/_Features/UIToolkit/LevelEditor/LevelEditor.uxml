@@ -68,7 +68,7 @@
                         <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Delete object" name="clear-tool-btn" class="category-radio icon" style="background-image: url(&quot;project://database/Assets/_Features/UIToolkit/LevelEditor/Assets/brush-off.png?fileID=2800000&amp;guid=17cc21c013337d74eb816ed9f22397e2&amp;type=3#brush-off&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement class="category-button-view" style="flex-grow: 1;">
-                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Delete object" name="fps-btn" class="category-radio icon" style="background-image: resource(&apos;Images/Trollface&apos;);" />
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Delete object" name="fps-btn" class="category-radio icon" style="background-image: resource(&apos;Images/icons8-street-view-100&apos;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
