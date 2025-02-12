@@ -51,10 +51,12 @@ public class TabController: Singleton<TabController> {
         Button deleteModeButton = root.Q<Button>("delete-mode-btn");
         Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
         Button clearToolButton = root.Q<Button>("clear-tool-btn");
+        Button fpsButton = root.Q<Button>("fps-btn");
 
         deleteModeButton.clicked += OnDeleteModeClick;
         wallDeleteModeButton.clicked += OnWallDeleteModeClick;
         clearToolButton.clicked += OnClearModeClick;
+        fpsButton.clicked += OnFpsClick;
 
         furnitureGroup.style.display = DisplayStyle.Flex;
         buildingGroup.style.display = DisplayStyle.None;
@@ -144,6 +146,15 @@ public class TabController: Singleton<TabController> {
 
         ChangeCategory();
     }
+
+    public void OnFpsClick() {
+        if (LevelEditorManager.Instance.GetState() == EditorState.PreviewWalking) {
+            LevelEditorManager.Instance.ChangeStatePrevious();
+        } else {
+            LevelEditorManager.Instance.ChangeState(EditorState.PreviewWalking);
+        }
+    }
+
     public void OnDeleteModeClick() {
         ResetSelectedObjectUI();
         LevelEditorManager.Instance.ChangeState(EditorState.RemovingObjects);
