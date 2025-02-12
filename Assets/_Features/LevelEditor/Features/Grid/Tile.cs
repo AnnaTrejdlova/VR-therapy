@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IClickable {
@@ -265,14 +264,12 @@ public class Tile : MonoBehaviour, IClickable {
     public bool ContainsPreview(TileWallPosition orientation)
     {
         bool contains = PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
-        print($"Obsahuje tile {GetGridPosition()} preview na {orientation}? {contains}");
         return contains;
     }
 
     public bool ContainsWall(TileWallPosition orientation)
     {
         bool contains = AddedWallsDictionary.ContainsKey(orientation) == true && AddedWallsDictionary[orientation].activeInHierarchy;
-        print($"Obsahuje tile {GetGridPosition()} wall na {orientation}? {contains}");
         return contains;
     }
 

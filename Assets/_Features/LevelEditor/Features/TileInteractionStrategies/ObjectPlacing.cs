@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class ObjectPlacing: TileInteractionStrategy {
     private bool _placingObject = false;
     public override void OnTileClick(Tile tile) {

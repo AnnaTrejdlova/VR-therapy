@@ -31,7 +31,6 @@ public class WallPlacing: TileInteractionStrategy {
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileClick(Tile tile, TileWallPosition position) {
         if (!_placingWall) {
-            
             _placingWall = true;
             _wallPlacingStartingTile = tile;
             _wallPlacingStartingPosition = position;
@@ -49,7 +48,6 @@ public class WallPlacing: TileInteractionStrategy {
     /// <param name="tile">Parrent <see cref="Tile"/></param>
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileHover(Tile tile, TileWallPosition position) {
-        //  hoveredTile.ToggleHighlightMaterial(true);
         if (_placingWall) {
             ShowWallsPreview(tile, position);
         } else {
@@ -90,8 +88,6 @@ public class WallPlacing: TileInteractionStrategy {
         // Get all tiles in the line
         _tilesLine = TileManager.Instance.GetTilesInLine(_wallPlacingStartingTile, lastHoveredTile);
 
-        print("-----------------------------------------------");
-        print($"Nový tile {lastHoveredTile.GetGridPosition()}");
         // Iterate through the tiles in the line
         for (int i = 0; i < _tilesLine.Count; i++) {
             Tile currentTile = _tilesLine[i];
@@ -166,7 +162,6 @@ public class WallPlacing: TileInteractionStrategy {
 
         foreach (var tuple in tileNeighbours) {
             if (tuple.Item1.ContainsWall(tuple.Item2) || tuple.Item1.ContainsPreview(tuple.Item2)) {
-                print($"Soused {tuple.Item1.GetGridPosition()} obsahuje věc na {tuple.Item2}");
                 return true;
             }
         }
@@ -181,11 +176,6 @@ public class WallPlacing: TileInteractionStrategy {
         else if (NeighbourTilesContainsPreview(currentTile, prefabPosition)) {
             return true;
         }
-        /*
-        else if (currentTile.ContainsPreview(prefabPosition)) {
-            return true;
-        }
-        */
         return false;
     }
 
