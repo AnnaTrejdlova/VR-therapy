@@ -6,12 +6,15 @@ using UnityEngine.EventSystems;
 
 public class ClickableListener : MonoBehaviour {
 
-    Camera mainCamera;
-    IClickable currentHoveredObject;
+    Camera _mainCamera;
+    IClickable _currentHoveredObject;
+    [SerializeField] private string _ignoredLayerName = "IgnoreRaycast";
+    private int _ignoredLayerMask;
 
 
     private void Start() {
-        mainCamera = Camera.main;
+        _mainCamera = Camera.main;
+        _ignoredLayerMask = ~LayerMask.GetMask(_ignoredLayerName);
     }
 
     private void Update() {
@@ -22,35 +25,35 @@ public class ClickableListener : MonoBehaviour {
             if (Input.GetMouseButtonDown(0)) {
                 HandleClick();
             }
-        } else if (currentHoveredObject != null) {
-            currentHoveredObject.OnHoverExit();
-            currentHoveredObject = null;
+        } else if (_currentHoveredObject != null) {
+            _currentHoveredObject.OnHoverExit();
+            _currentHoveredObject = null;
         }
     }
 
     void HandleHover() {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo)) {
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _ignoredLayerMask)) {
             IClickable clickedObject = hitInfo.collider.GetComponent<IClickable>();
-            if (clickedObject != currentHoveredObject) {
-                if (currentHoveredObject != null) {
-                    currentHoveredObject.OnHoverExit();
+            if (clickedObject != _currentHoveredObject) {
+                if (_currentHoveredObject != null) {
+                    _currentHoveredObject.OnHoverExit();
                 }
-                currentHoveredObject = clickedObject;
-                if (currentHoveredObject != null) {
-                    currentHoveredObject.OnHoverEnter();
+                _currentHoveredObject = clickedObject;
+                if (_currentHoveredObject != null) {
+                    _currentHoveredObject.OnHoverEnter();
                 }
             }
         } else {
-            if (currentHoveredObject != null) {
-                currentHoveredObject.OnHoverExit();
-                currentHoveredObject = null;
+            if (_currentHoveredObject != null) {
+                _currentHoveredObject.OnHoverExit();
+                _currentHoveredObject = null;
             }
         }
     }
 
     void HandleClick() {
-        currentHoveredObject?.OnClick();
+        _currentHoveredObject?.OnClick();
     }
 }

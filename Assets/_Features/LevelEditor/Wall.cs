@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Wall : MonoBehaviour, IClickable {
 
     public TileWallPosition orientation;
     public Tile tile;
+    public string NotRaycastTargetLayerName = "NotRaycastTarget";
 
     private Material _originalMaterial;
     private MeshRenderer _meshRenderer;
@@ -45,5 +47,20 @@ public class Wall : MonoBehaviour, IClickable {
             }
             _meshRenderer.material = _originalMaterial;
         }
+    }
+
+    void HandleStateChange(EditorState newState) {
+        if (newState == EditorState.RemovingWalls) {
+            gameObject.layer = 0;
+        } else {
+            gameObject.layer = LayerMask.NameToLayer(NotRaycastTargetLayerName);
+        }
+    }
+    void OnEnable() {
+        LevelEditorManager.Instance.OnStateChanged.AddListener(HandleStateChange);
+    }
+
+    void OnDisable() {
+        LevelEditorManager.Instance.OnStateChanged.RemoveListener(HandleStateChange);
     }
 }

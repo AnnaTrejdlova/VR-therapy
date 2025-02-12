@@ -13,6 +13,7 @@ public class TileManager : Singleton<TileManager> {
     private Dictionary<Vector2Int, Tile> _tileDictionary = new Dictionary<Vector2Int, Tile>();
     private int _yMax;
     private int _xMax;
+    private Tile _lastHoveredTile;
 
     protected override void Awake() {
         base.Awake();
@@ -74,6 +75,13 @@ public class TileManager : Singleton<TileManager> {
         return GetTilesInLine(startPos, endPos);
     }
 
+    public Tile GetLastHoveredTile() {
+        return _lastHoveredTile;
+    }
+
+    public void SetLastHoveredTile(Tile tile) {
+        _lastHoveredTile = tile;
+    }
 
     # region Tile interaction strategy
 
@@ -83,6 +91,7 @@ public class TileManager : Singleton<TileManager> {
     }
 
     public void TileHoverEnterHandle(Tile tile) {
+        SetLastHoveredTile(tile);
         FindStrategy(LevelEditorManager.Instance.GetState())?.OnTileHover(tile);
     }
 

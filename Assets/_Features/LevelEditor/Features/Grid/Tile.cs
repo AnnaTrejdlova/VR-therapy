@@ -28,6 +28,7 @@ public class Tile : MonoBehaviour, IClickable {
     private Vector2Int gridPosition;
     public Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
+    private bool isActivelyHovered = false;
 
     void Awake() {
         classicCollider = GetComponent<BoxCollider>();  
@@ -215,10 +216,12 @@ public class Tile : MonoBehaviour, IClickable {
 
     public void OnHoverEnter() {
         TileManager.Instance.TileHoverEnterHandle(this);
+        isActivelyHovered = true;
     }
 
     public void OnHoverExit() {
         TileManager.Instance.TileHoverExitHandle(this);
+        isActivelyHovered = false;
     }
 
     #endregion
@@ -310,6 +313,14 @@ public class Tile : MonoBehaviour, IClickable {
     }
 
     #endregion
+
+    public bool HasObjectPreview() {
+        return addedGameObjectPreview != null;
+    }
+
+    public bool IsActivelyHovered() {
+        return isActivelyHovered;
+    }
 }
 // Class for being able to assign Orientation positions
 
