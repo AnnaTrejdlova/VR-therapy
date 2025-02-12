@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 383172648777344990}
   - component: {fileID: 383172648777344991}
   m_Layer: 0
-  m_Name: sceneDebuger
+  m_Name: SceneDebugger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

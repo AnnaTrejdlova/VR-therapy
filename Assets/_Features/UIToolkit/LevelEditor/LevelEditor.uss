@@ -182,3 +182,36 @@ Button.icon:hover {
 Button.active {
     background-color: rgb(212, 155, 155);
 }
+
+.tooltipLabel {
+    display: flex;
+    position: absolute;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 500px;
+    background-color: rgb(59, 59, 59);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    min-width: 100px;
+    color: rgb(255, 255, 255);
+    font-size: 26px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
+    white-space: normal;
+    text-overflow: clip;
+    -unity-text-align: upper-left;
+}

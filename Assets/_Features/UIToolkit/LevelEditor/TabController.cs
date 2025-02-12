@@ -4,21 +4,16 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class TabController: MonoBehaviour {
+public class TabController: Singleton<TabController> {
     public static event Action<Category> OnCategoryChanged;
 
     [SerializeField]
     private VisualTreeAsset tileTemplateAsset;
 
-    private Button furnitureTab;
-    private Button buildingTab;
     private VisualElement contentPanel;
     private UQueryState<TemplateContainer> TileQuery;
 
     private VisualElement root;
-
-    private List<Button> tabButtons;
-    private List<Button> categoryButtons;
 
     public EditorObjectCategory SelectedTabCategory { get; private set; } = 0;
     public Subcategory<FurnitureSubcategory, BuildingSubcategory> SelectedSubcategory { get; private set; } = (FurnitureSubcategory)0;
@@ -52,6 +47,21 @@ public class TabController: MonoBehaviour {
 
         #endregion
 
+        #region Toolbox group
+        Button deleteModeButton = root.Q<Button>("delete-mode-btn");
+        Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
+        Button clearToolButton = root.Q<Button>("clear-tool-btn");
+        Button fpsButton = root.Q<Button>("fps-btn");
+
+        deleteModeButton.clicked += OnDeleteModeClick;
+        wallDeleteModeButton.clicked += OnWallDeleteModeClick;
+        clearToolButton.clicked += OnClearModeClick;
+        fpsButton.clicked += OnFpsClick;
+
+        furnitureGroup.style.display = DisplayStyle.Flex;
+        buildingGroup.style.display = DisplayStyle.None;
+        #endregion
+
         #region Tabs group
 
         RadioButtonGroup tabGroup = root.Q<RadioButtonGroup>("tab-picker");
@@ -68,11 +78,17 @@ public class TabController: MonoBehaviour {
                     SelectedSubcategory = (FurnitureSubcategory)furnitureGroup.value;
                     furnitureGroup.style.display = DisplayStyle.Flex;
                     buildingGroup.style.display = DisplayStyle.None;
+
+                    wallDeleteModeButton.parent.style.display = DisplayStyle.None;
+                    deleteModeButton.parent.style.display = DisplayStyle.Flex;
                     break;
                 case EditorObjectCategory.Building:
                     SelectedSubcategory = (BuildingSubcategory)buildingGroup.value;
                     furnitureGroup.style.display = DisplayStyle.None;
                     buildingGroup.style.display = DisplayStyle.Flex;
+
+                    wallDeleteModeButton.parent.style.display = DisplayStyle.Flex;
+                    deleteModeButton.parent.style.display = DisplayStyle.None;
                     break;
                 default:
                     break;
@@ -101,16 +117,31 @@ public class TabController: MonoBehaviour {
         tileGroup.RegisterValueChangedCallback(OnTileSelected);
         #endregion
 
-        #region Toolbox group
-        Button deleteModeButton = root.Q<Button>("delete-mode-btn");
-        Button wallDeleteModeButton = root.Q<Button>("wall-delete-mode-btn");
-        Button clearToolButton = root.Q<Button>("clear-tool-btn");
-        Button fpsButton = root.Q<Button>("fps-btn");
+        #region Setup Tooltips
+        var buttonsWithTooltip = (IEnumerable<VisualElement>)root.Query<Button>().Build()
+            .Where(btn => !string.IsNullOrEmpty(btn.tooltip));
+        var radioButtonsWithTooltip = (IEnumerable<VisualElement>)root.Query<RadioButton>().Build()
+            .Where(btn => !string.IsNullOrEmpty(btn.tooltip));
 
-        deleteModeButton.clicked += OnDeleteModeClick;
-        wallDeleteModeButton.clicked += OnWallDeleteModeClick;
-        clearToolButton.clicked += OnClearModeClick;
-        fpsButton.clicked += OnFpsClick;
+        IEnumerable<VisualElement> combinedQuery = buttonsWithTooltip.Concat(radioButtonsWithTooltip);
+
+        var tooltipHandler = GetComponent<TooltipHandler>();
+
+        foreach (var element in combinedQuery) {
+            element.RegisterCallback<MouseOverEvent>(evt => MyButtonMouseOver(element));
+            element.RegisterCallback<MouseOutEvent>(evt => MyButtonMouseOut());
+        }
+
+        void MyButtonMouseOver(VisualElement element) {
+            // For dynamic tooltips
+            StringObject tooltipString = new StringObject(element.tooltip);
+            //tooltipString.text = "Some String or other variable that you want to display in a tooltip.";
+            tooltipHandler.OnElementMouseOver(tooltipString);
+        }
+
+        void MyButtonMouseOut() {
+            tooltipHandler.OnElementMouseLeave();
+        }
         #endregion
 
         ChangeCategory();
@@ -219,31 +250,25 @@ public class TabController: MonoBehaviour {
         SelectedObject = null;
     }
 
-    private void FillObjectPanelWithContent()
-    {
+    private void FillObjectPanelWithContent() {
         // Populate tiles with new content
-        for (int i = 0; i < Math.Max(inCategoryObjects.Count, TileQuery.Count()); i++)
-        {
+        for (int i = 0; i < Math.Max(inCategoryObjects.Count, TileQuery.Count()); i++) {
             // All objects are rendered, hide the rest
-            if (i >= inCategoryObjects.Count)
-            {
+            if (i >= inCategoryObjects.Count) {
                 var _tile = TileQuery.AtIndex(i);
                 _tile.visible = false;
                 continue;
             }
 
             // Reuse a tile to set the model UI texture
-            if (i < TileQuery.Count())
-            {
+            if (i < TileQuery.Count()) {
                 var _tile = TileQuery.AtIndex(i);
                 _tile.Q<VisualElement>("tile").RemoveFromClassList("RadioButton--selected");
                 _tile.Q<VisualElement>("tile").style.backgroundImage = inCategoryObjects[i].UITexture;
                 _tile.Q<VisualElement>("tile").Q<RadioButton>().value = false;
                 _tile.style.height = _tile.style.width;
                 _tile.visible = true;
-            }
-            else
-            { // Not enough tiles in a pool
+            } else { // Not enough tiles in a pool
                 var newTile = tileTemplateAsset.CloneTree();
                 newTile.Q<VisualElement>("tile").style.backgroundImage = inCategoryObjects[i].UITexture;
                 newTile.style.height = newTile.style.width;
@@ -253,13 +278,10 @@ public class TabController: MonoBehaviour {
             // Generate a debug label for the Tile
             var tile = TileQuery.AtIndex(i);
             var label = tile.Q<Label>();
-            if (label == null)
-            {
+            if (label == null) {
                 label = new Label(inCategoryObjects[i].name);
                 tile.Add(label);
-            }
-            else
-            {
+            } else {
                 label.text = inCategoryObjects[i].name;
             }
         }

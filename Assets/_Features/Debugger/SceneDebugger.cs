@@ -2,20 +2,24 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class sceneDebugger : MonoBehaviour {
-    /// <summary>
-    /// You add this to your scene if you need utilities loaded for the thing you are testing
-    /// </summary>
-
-
+#if UNITY_EDITOR
+/// <summary>
+/// You add this to your scene if you need utilities loaded for the thing you are testing
+/// </summary>
+public class SceneDebugger : MonoBehaviour {
     public SceneField Utility;
 
     void Awake() {
-        StartCoroutine(LoadUtilitiesAndInitializeScene());
+        // If Utilities not loaded, load them
+        if (!SceneManager.GetSceneByName(Utility.SceneName).IsValid()) {
+            StartCoroutine(LoadUtilitiesAndInitializeScene());
+        } else {
+            // Should I run initializer?
+        }
     }
 
     IEnumerator LoadUtilitiesAndInitializeScene() {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(Utility.SceneName, LoadSceneMode.Additive);
         while (!asyncLoad.isDone) {
             yield return null;
         }
@@ -36,3 +40,4 @@ public class sceneDebugger : MonoBehaviour {
     }
 
 }
+#endif
