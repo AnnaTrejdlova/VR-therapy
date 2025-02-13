@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f47bb846ed0ff43826c847fc98bd5a, type: 3}
+  m_Name: Stul 2
+  m_EditorClassIdentifier: 
+  Name: "Bao st\u016Fl"
+  EditorObjectType: 0
+  furnitureSubcategory: 0
+  buildingSubcategory: 0
+  Model: {fileID: 919132149155446097, guid: c03ae710d777f3940966a5a026047cb6, type: 3}
+  Texture: {fileID: 2800000, guid: 025dfeb3f0f9fd848841b063f6db0b62, type: 3}
+  UITexture: {fileID: 2800000, guid: be4838f7073c9ce4a9dea98d09bd2bb8, type: 3}
