@@ -10,13 +10,13 @@ public class ObjectPlacing: TileInteractionStrategy {
     public override void OnTileHover(Tile tile) {
         _placingObject = false;
         if (EditorObjectManager.Instance.GetSelectedObject() != null) {
-            tile.AddObjectPreviewToTile(EditorObjectManager.Instance.GetSelectedObject());
+            tile.AddObjectToTile(EditorObjectManager.Instance.GetSelectedObject());
         }
     }
 
     public override void OnTileUnhover(Tile tile) {
         if (!_placingObject) {
-            tile.RemoveObjectPreviewFromTile();
+            tile.RemoveObjectFromTile();
         }
     }
 }
