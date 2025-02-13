@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class ObjectPlacing: TileInteractionStrategy {
     private bool _placingObject = false;
     public override void OnTileClick(Tile tile) {
@@ -10,13 +12,13 @@ public class ObjectPlacing: TileInteractionStrategy {
     public override void OnTileHover(Tile tile) {
         _placingObject = false;
         if (EditorObjectManager.Instance.GetSelectedObject() != null) {
-            tile.AddObjectToTile(EditorObjectManager.Instance.GetSelectedObject());
+            tile.AddObjectPreviewToTile(EditorObjectManager.Instance.GetSelectedObject());
         }
     }
 
     public override void OnTileUnhover(Tile tile) {
         if (!_placingObject) {
-            tile.RemoveObjectFromTile();
+            tile.RemoveObjectPreviewFromTile();
         }
     }
 }

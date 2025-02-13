@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WallPlacing: TileInteractionStrategy {
 
@@ -31,10 +33,10 @@ public class WallPlacing: TileInteractionStrategy {
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileClick(Tile tile, TileWallPosition position) {
         if (!_placingWall) {
+            
             _placingWall = true;
             _wallPlacingStartingTile = tile;
             _wallPlacingStartingPosition = position;
-            tile.ClearWallPreviews();
             ShowWallsPreview(tile, position);
         } else {
             CreatePreviewedWalls();
@@ -48,6 +50,7 @@ public class WallPlacing: TileInteractionStrategy {
     /// <param name="tile">Parrent <see cref="Tile"/></param>
     /// <param name="position"><paramref name="clickedTile"/> position in <paramref name="tile"/></param>
     public override void OnTileHover(Tile tile, TileWallPosition position) {
+        //  hoveredTile.ToggleHighlightMaterial(true);
         if (_placingWall) {
             ShowWallsPreview(tile, position);
         } else {
@@ -106,8 +109,13 @@ public class WallPlacing: TileInteractionStrategy {
                     endTilePosition = _tilesLine[0].hoveredTile.GetGridPosition();
                 }
 
+                
+
                 placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
+                print($"{placementDirection}");
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
+
+                print($"{jointOrientations[0]}, {jointOrientations[1]}");
 
                 if (!ContainsPrefab(currentTile, jointOrientations[0])) {
                     currentTile.AddWallJointPreview(_wallJointPrefab, jointOrientations[0]);
@@ -161,7 +169,7 @@ public class WallPlacing: TileInteractionStrategy {
         List<Tuple<Tile, TileWallPosition>> tileNeighbours = TileManager.Instance.GetNeighbourTiles(centerTile, prefabPosition);
 
         foreach (var tuple in tileNeighbours) {
-            if (tuple.Item1.ContainsWall(tuple.Item2) || tuple.Item1.ContainsPreview(tuple.Item2)) {
+            if (tuple.Item1.ContainsWall(tuple.Item2)) {
                 return true;
             }
         }
@@ -170,12 +178,12 @@ public class WallPlacing: TileInteractionStrategy {
     }
 
     private bool ContainsPrefab(Tile currentTile, TileWallPosition prefabPosition) {
-        if (currentTile.ContainsWall(prefabPosition)) {
+        if (currentTile.ContainsWall(prefabPosition))
             return true;
-        }
         else if (NeighbourTilesContainsPreview(currentTile, prefabPosition)) {
-            return true;
+            print($"Obsahuje nějaký soused okolo {currentTile} {prefabPosition}? {NeighbourTilesContainsPreview(currentTile, prefabPosition)}");
         }
+
         return false;
     }
 
