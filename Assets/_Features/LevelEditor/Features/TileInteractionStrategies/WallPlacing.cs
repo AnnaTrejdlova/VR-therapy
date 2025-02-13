@@ -16,7 +16,7 @@ public class WallPlacing: TileInteractionStrategy {
     private bool _placingWall = false;
     private Tile _wallPlacingStartingTile;
     private TileWallPosition _wallPlacingStartingPosition;
-    private List<Tile> _tilesLine;
+    private List<Tile> _tilesLine = new List<Tile>();
 
     void Awake() {
         _wallJointPrefab = WallManager.Instance.WallJointPrefab;
@@ -341,6 +341,17 @@ public class WallPlacing: TileInteractionStrategy {
         Left,
         Right,
         Null
+    }
+
+    #endregion
+
+    #region Helpers
+
+    public void OnStateChanged() {
+        if (_tilesLine.Count != 0) {
+            ClearWallPreviews();
+            _placingWall = false;
+        }
     }
 
     #endregion
