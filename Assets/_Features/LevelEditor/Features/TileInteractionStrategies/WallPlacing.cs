@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WallPlacing: TileInteractionStrategy {
 
@@ -34,7 +36,6 @@ public class WallPlacing: TileInteractionStrategy {
             _placingWall = true;
             _wallPlacingStartingTile = tile;
             _wallPlacingStartingPosition = position;
-            tile.ClearWallPreviews();
             ShowWallsPreview(tile, position);
         } else {
             CreatePreviewedWalls();
@@ -106,8 +107,13 @@ public class WallPlacing: TileInteractionStrategy {
                     endTilePosition = _tilesLine[0].hoveredTile.GetGridPosition();
                 }
 
+                
+
                 placementDirection = GetDirectionFirstTile(startTilePosition, endTilePosition);
+                print($"{placementDirection}");
                 TileWallPosition[] jointOrientations = DetermineJointPositions(placementDirection);
+
+                print($"{jointOrientations[0]}, {jointOrientations[1]}");
 
                 if (!ContainsPrefab(currentTile, jointOrientations[0])) {
                     currentTile.AddWallJointPreview(_wallJointPrefab, jointOrientations[0]);
@@ -170,9 +176,8 @@ public class WallPlacing: TileInteractionStrategy {
     }
 
     private bool ContainsPrefab(Tile currentTile, TileWallPosition prefabPosition) {
-        if (currentTile.ContainsWall(prefabPosition)) {
+        if (currentTile.ContainsWall(prefabPosition))
             return true;
-        }
         else if (NeighbourTilesContainsPreview(currentTile, prefabPosition)) {
             return true;
         }

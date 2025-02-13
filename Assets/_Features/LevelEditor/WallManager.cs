@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WallManager: Singleton<WallManager> {
@@ -11,4 +14,5 @@ public class WallManager: Singleton<WallManager> {
     protected override void Awake() {
         base.Awake();
     }
+
 }
