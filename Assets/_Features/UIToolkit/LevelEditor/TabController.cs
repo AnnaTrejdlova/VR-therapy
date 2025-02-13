@@ -45,9 +45,6 @@ public class TabController: Singleton<TabController> {
             ChangeCategory();
         });
 
-        furnitureGroup.style.display = DisplayStyle.Flex;
-        buildingGroup.style.display = DisplayStyle.None;
-
         #endregion
 
         #region Toolbox group
@@ -61,8 +58,8 @@ public class TabController: Singleton<TabController> {
         clearToolButton.clicked += OnClearModeClick;
         fpsButton.clicked += OnFpsClick;
 
-        wallDeleteModeButton.parent.style.display = DisplayStyle.None;
-        deleteModeButton.parent.style.display = DisplayStyle.Flex;
+        furnitureGroup.style.display = DisplayStyle.Flex;
+        buildingGroup.style.display = DisplayStyle.None;
         #endregion
 
         #region Tabs group

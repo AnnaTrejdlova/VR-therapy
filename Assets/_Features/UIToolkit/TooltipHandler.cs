@@ -33,7 +33,7 @@ public class TooltipHandler: Singleton<TooltipHandler> {
     }
 
     public void OnElementMouseOver(StringObject _tooltipText = null) {
-        if (showTooltipCoroutine != null) { // Stop old one
+        if (showTooltipCoroutine != null) {
             StopCoroutine(showTooltipCoroutine);
         }
         tooltipText = _tooltipText;
@@ -46,32 +46,24 @@ public class TooltipHandler: Singleton<TooltipHandler> {
 
         int screenWidth = Screen.width;
         int screenHeight = Screen.height;
-        float uiCanvasWidth = root.resolvedStyle.width;
-        float uiCanvasHeight = root.resolvedStyle.height;
+        float mouseXPosition = Input.mousePosition.x;
+        float mouseYPosition = Input.mousePosition.y;
 
-        float mouseXPosition = Input.mousePosition.x; // Relative to Screen.width
-        float mouseYPosition = Input.mousePosition.y; // Relative to Screen.height
-
-        float canvasScaleFactor = root.resolvedStyle.width / Screen.width; // Scale between "a reference resolution of a UI document canvas (1920x1080)" and Screen resolution
-        float mouseXPosition_Scaled = Input.mousePosition.x * canvasScaleFactor; // root.resolvedStyle.width (a reference resolution of a UI document canvas, usually 1920x1080)
-        float mouseYPosition_Scaled = Input.mousePosition.y * canvasScaleFactor; // root.resolvedStyle.height
-
-        Vector2 textSize = tooltipLabel.MeasureTextSize(tooltipText.text, tooltipLabel.resolvedStyle.maxWidth.value, VisualElement.MeasureMode.AtMost, 0, VisualElement.MeasureMode.Undefined);
-        textSize /= canvasScaleFactor; // Scale to Screen sizes
+        Vector2 textSize = tooltipLabel.MeasureTextSize(tooltipText.text, 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined);
         tooltipLabel.visible = true;
 
-        if (mouseXPosition >= screenWidth - textSize.x) { // In screen resolution units
-            tooltipLabel.style.left = (screenWidth - textSize.x - 5) * canvasScaleFactor; // In reference canvas resolution units (1920x1080)
+        if (mouseXPosition >= screenWidth - (textSize.x)) {
+            tooltipLabel.style.left = screenWidth - textSize.x - 5;
         } else {
-            tooltipLabel.style.left = (mouseXPosition + 5) * canvasScaleFactor;
+            tooltipLabel.style.left = mouseXPosition + 5;
         }
 
         if (mouseYPosition >= screenHeight - textSize.y) {
-            tooltipLabel.style.top = (screenHeight - mouseYPosition);
-            tooltipLabel.style.bottom = (mouseYPosition - textSize.y - 15) * canvasScaleFactor;
+            tooltipLabel.style.top = screenHeight - mouseYPosition;
+            tooltipLabel.style.bottom = mouseYPosition - textSize.y - 15;
         } else {
-            tooltipLabel.style.bottom = (mouseYPosition) * canvasScaleFactor;
-            tooltipLabel.style.top = (screenHeight - mouseYPosition - textSize.y - 15) * canvasScaleFactor;
+            tooltipLabel.style.bottom = mouseYPosition;
+            tooltipLabel.style.top = screenHeight - mouseYPosition - textSize.y - 15;
         }
 
         tooltipLabel.text = tooltipText.text;

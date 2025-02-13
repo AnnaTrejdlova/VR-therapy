@@ -24,6 +24,7 @@ public class Tile : MonoBehaviour, IClickable {
     private float tileSize = 1f;
     private Outline outline;
     private GameObject addedGameObject; // what you put into it
+    private GameObject addedGameObjectPreview; // what you put into it
     private Vector2Int gridPosition;
     public Dictionary<TileWallPosition, GameObject> AddedWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
     public Dictionary<TileWallPosition, GameObject> PreviewWallsDictionary = new Dictionary<TileWallPosition, GameObject>();
@@ -144,26 +145,59 @@ public class Tile : MonoBehaviour, IClickable {
 
     #endregion
 
-    #region Adding/Removing objects
+    #region Manipulating added objects
 
     public void AddObjectToTile(GameObject obj) {
         InstantiateAddedObject(obj);
     }
 
+    public void AddObjectPreviewToTile(GameObject obj) {
+        InstantiateAddedObjectPreview(obj);
+    }
+
     public void RemoveObjectFromTile() {
-        Destroy(addedGameObject);
-        addedGameObject = null;
+        if (isTileOccupied()) {
+            Destroy(addedGameObject);
+            addedGameObject = null;
+        }
+    }
+
+    public void RemoveObjectPreviewFromTile() {
+        if (isTileOccupied()) {
+            Destroy(addedGameObjectPreview);
+            addedGameObjectPreview = null;
+        }
+    }
+
+    public void RotateOject(float angle = 45f) {
+        addedGameObject.transform.Rotate(new Vector3(0, angle, 0));
     }
 
     void InstantiateAddedObject(GameObject obj) {
         if (addedGameObject != null) {
             Destroy(addedGameObject);
         }
+        if (addedGameObjectPreview != null) {
+            addedGameObjectPreview.GetComponent<EditorObject>().RestoreOriginalMaterials();
+            addedGameObject = addedGameObjectPreview;
+            addedGameObjectPreview = null;
+            return;
+        }
+
         // must not be a child of the tile because of the scale shenanigans
         // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
         addedGameObject = Instantiate(obj, transform.position, Quaternion.identity);
         addedGameObject.transform.position += new Vector3(0, transform.localScale.y, 0);
         addedGameObject.AddComponent<EditorObject>();
+    }
+
+    void InstantiateAddedObjectPreview(GameObject obj) {
+        // must not be a child of the tile because of the scale shenanigans
+        // I am adding 0.5f because the pivot is in the center of the model, if the pivot would be at the bottom of the model there wouldnt be need to make it go up
+        addedGameObjectPreview = Instantiate(obj, transform.position, Quaternion.identity);
+        addedGameObjectPreview.transform.position += new Vector3(0, transform.localScale.y, 0);
+        addedGameObjectPreview.AddComponent<EditorObject>();
+        addedGameObjectPreview.GetComponent<EditorObject>().SetMaterial(EditorObjectManager.Instance.PreviewMaterial);
     }
 
     public void ChangeObjectMaterial(Material material) {
@@ -202,13 +236,12 @@ public class Tile : MonoBehaviour, IClickable {
         gridPosition = pos;
     }
 
-    /// <returns>[x,y] coordinates of position in placing grid</returns>
     public Vector2Int GetGridPosition() {
         return gridPosition;
     }
 
     public bool isTileOccupied() {
-        return addedGameObject != null;
+        return addedGameObject != null || addedGameObjectPreview != null;
     }
 
     #endregion
@@ -263,8 +296,7 @@ public class Tile : MonoBehaviour, IClickable {
 
     public bool ContainsPreview(TileWallPosition orientation)
     {
-        bool contains = PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
-        return contains;
+        return PreviewWallsDictionary.ContainsKey(orientation) == true && PreviewWallsDictionary[orientation].activeInHierarchy;
     }
 
     public bool ContainsWall(TileWallPosition orientation)
